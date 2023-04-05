@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ManyEvents.Data;
 using ManyEvents.Models;
+using ManyEvents.API.Dto;
 
 namespace ManyEvents.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class MEventsController : Controller
     {
         private readonly DBContext _context;
@@ -17,6 +20,22 @@ namespace ManyEvents.Controllers
         public MEventsController(DBContext context)
         {
             _context = context;
+        }
+
+        [HttpGet]
+        [Route("events")]
+        public  IEnumerable<MEventDto> GetMEvents()
+        {
+
+            var list = _context.MEvent
+                .Select(e => new MEventDto
+                {
+                    Id = e.Id,
+                    Title = e.Title
+
+                }).ToList();
+
+            return list;
         }
 
         // GET: MEvents
