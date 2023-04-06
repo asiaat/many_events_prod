@@ -13,6 +13,21 @@ namespace ManyEvents.Models
         [StringLength(250)]
         public string? Remarks { get; set; }
 
+		public MFeeType()
+		{
+
+		}
+
+		public void SetName(string name)
+		{
+			Name = name;
+		}
+
+		public void SetRemarks(string remarks)
+		{
+			Remarks = remarks;
+		}
+
 	}
 }
 
