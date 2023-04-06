@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ManyEvents.Data;
 using ManyEvents.Models;
 using ManyEvents.API.Dto;
+using Serilog;
 
 namespace ManyEvents.Controllers
 {
@@ -26,6 +27,8 @@ namespace ManyEvents.Controllers
         [Route("feetypes")]
         public IEnumerable<MFeeTypeDto> GetMEvents()
         {
+            Log.Information("MFeeTypesController::GetMEvents");
+
 
             var list = _context.MFeeType
                 .Select(f => new MFeeTypeDto
