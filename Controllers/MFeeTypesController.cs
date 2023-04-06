@@ -71,8 +71,12 @@ namespace ManyEvents.Controllers
 
             if(foundFeeType is null)
             {
-                throw new Exception("Fee Type with this id does not exists id: "+
-                    ftype.Id.ToString());
+                string msg = "Fee Type with this id does not exists id: " +
+                    ftype.Id.ToString();
+
+                Log.Error(msg);
+
+                throw new Exception(msg);
             }
 
             if(ftype.Name is not null)
