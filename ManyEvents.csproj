@@ -39,6 +39,7 @@
     <None Remove="Data\" />
     <None Remove="API\" />
     <None Remove="API\Dto\" />
+    <None Remove="ClientApp\src\components\Header\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +47,7 @@
     <Folder Include="Data\" />
     <Folder Include="API\" />
     <Folder Include="API\Dto\" />
+    <Folder Include="ClientApp\src\components\Header\" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
