@@ -39,6 +39,26 @@ namespace ManyEvents.Controllers
             return list;
         }
 
+        // POST: MFeeTypes/Create
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        [Route("new")]
+        public MFeeTypeDto CreateNewFeeType(MFeeType ftype)
+        {
+            var newFeeType = _context.MFeeType
+                .Add(ftype);
+
+            _context.SaveChanges();
+
+            
+            return new MFeeTypeDto
+            {
+                Id = ftype.Id,
+                Name = ftype.Name,
+                Remarks = ftype.Remarks,
+            };
+        }
+
         // GET: MFeeTypes
         public async Task<IActionResult> Index()
         {
