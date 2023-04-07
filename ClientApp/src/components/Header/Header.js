@@ -44,11 +44,12 @@ export default function Header() {
                             <li className="border-b border-gray-400 my-8 uppercase">
                                 <a href="/portfolio">Portfolio</a>
                             </li>
-                            <li className="border-b border-gray-400 my-8 uppercase">
-                                <a href="/contact">Contact</a>
-                            </li>
+                            
                             <li className="border-b border-gray-400 my-8 uppercase">
                                 <a href="/feetypes">Maksevõimalused</a>
+                            </li>
+                            <li className="border-b border-gray-400 my-8 uppercase">
+                                <a href="/login">Login</a>
                             </li>
                             
                         </ul>
@@ -62,11 +63,12 @@ export default function Header() {
                     <li>
                         <a href="/portfolio">Portfolio</a>
                     </li>
-                    <li>
-                        <a href="/contact">Contact</a>
-                    </li>
+                    
                     <li>
                         <a href="/feetypes">Maksevõimalused</a>
+                    </li>
+                    <li>
+                        <a href="/login">Login</a>
                     </li>
                     
                 </ul>
