@@ -39,6 +39,7 @@ export default function Login() {
             localStorage.setItem('user', JSON.stringify(data.get('email')));
 
         }
+        window.location.reload(true);
         
     };
 
@@ -46,7 +47,7 @@ export default function Login() {
 
         console.log("Logout")
         localStorage.removeItem("user");
-
+        window.location.reload(true);
 
     };
 
