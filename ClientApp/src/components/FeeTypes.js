@@ -1,58 +1,68 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 
-export class FeeTypes extends Component {
-  static displayName = "Fee Types";
 
-  constructor(props) {
-    super(props);
-    this.state = { feetypes: [], loading: true };
+export default function FeeTypes() {
+
+    const [displayName, setDisplauName] = useState("Fee Types");
+    const [user, setUser] = useState();
+    const [feeTypes, setFeeTypes] = useState([]);
+
+    const populateFeeTypes = async () => {
+        const response = await fetch('api/mfeetypes/feetypes');
+        const data = await response.json();
+        setFeeTypes(data);
+    }
+
+
+    useEffect(() => {
+        setUser(localStorage.getItem("user"))
+        populateFeeTypes()
+    }, []);
+
+    const renderFeeTypesTable = (ftypes) => {
+
+        if (user) {
+
+            return (
+                <table className="table table-striped" aria-labelledby="tableLabel">
+                    <thead>
+                        <tr>
+
+                            <th>Name</th>
+                            <th>Remarks</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {ftypes.map(ftypes =>
+                            <tr key={ftypes.id}>
+                                <td>{ftypes.name}</td>
+                                <td>{ftypes.remarks}</td>
+
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            )
+        } else {
+            return (
+                <h1>Puudub teabevajadus</h1>
+            )
+        }
+
   }
 
-  componentDidMount() {
-      this.populateFeeTypes();
-  }
-
-  static renderFeeTypesTable(ftypes) {
-    return (
-      <table className="table table-striped" aria-labelledby="tableLabel">
-        <thead>
-          <tr>
-            
-            <th>Name</th>
-            <th>Remarks</th>
-            
-          </tr>
-        </thead>
-            <tbody>
-                {ftypes.map(ftypes =>
-            <tr key={ftypes.id}>
-              <td>{ftypes.name}</td>
-              <td>{ftypes.remarks}</td>
-              
-            </tr>
-          )}
-        </tbody>
-      </table>
-    );
-  }
-
-  render() {
-    let contents = this.state.loading
-        ? <p><em>Loading...</em></p>
-        : FeeTypes.renderFeeTypesTable(this.state.feetypes);
+ 
 
     return (
       <div>
-        <h1 id="tableLabel">Weather forecast</h1>
-        <p>This component demonstrates fetching data from the server.</p>
-        {contents}
+        <h1 id="tableLabel">Maksevõimalused</h1>
+      
+            
+            {renderFeeTypesTable(feeTypes)}
       </div>
     );
-  }
+ 
 
-  async populateFeeTypes() {
-    const response = await fetch('api/mfeetypes/feetypes');
-    const data = await response.json();
-    this.setState({ feetypes: data, loading: false });
-  }
+  
 }

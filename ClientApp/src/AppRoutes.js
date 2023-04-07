@@ -1,5 +1,5 @@
 import { Counter } from "./components/Counter";
-import { FeeTypes } from "./components/FeeTypes";
+import FeeTypes  from "./components/FeeTypes";
 import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
 import  Login  from "./components/Login/Login";

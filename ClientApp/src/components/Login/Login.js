@@ -1,5 +1,5 @@
-﻿import * as React from 'react';
-//import React, { Component } from 'react';
+﻿//import * as React from 'react';
+import React, { Component, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,23 +15,13 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
-function Copyright(props) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-      </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
 
 const theme = createTheme();
 
 export default function Login() {
-//export class Login extends Component {
+
+    const [showStatus, setShowStatus] = useState(-1); 
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -39,6 +29,10 @@ export default function Login() {
             email: data.get('email'),
             password: data.get('password'),
         });
+        if (data.get('email')) {
+            localStorage.setItem('user', JSON.stringify(data.get('email')));
+        }
+        
     };
 
     return (
@@ -86,6 +80,7 @@ export default function Login() {
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
+                            
                         >
                             Logige sisse
             </Button>
