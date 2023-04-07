@@ -31,24 +31,27 @@ export default function FeeTypes() {
     const handleClose = () => setOpen(false);
    
 
-    const populateFeeTypes = async () => {
-        const response = await fetch('api/mfeetypes/feetypes');
-        const data = await response.json();
-        setFeeTypes(data);
-    }
-
     const retrieveFeeTypes = async () => {
         await axios.get("https://localhost:44450/api/mfeetypes/feetypes")
             .then((response) => {
-                console.log(response.data);
+                //console.log(response.data);
                 setFeeTypes(response.data)
             })
     }
+    const addNewFeeType = async () => {
+        const newFeeType = { name: 'Bitcoins', remarks : 'BTC' };
+        await axios.post("https://localhost:44450/api/mfeetypes/new",
+                            newFeeType)
+            .then((response) => {
+                console.log(response.data);
+                //setFeeTypes(response.data)
+            })
 
+        handleClose()
+    }
 
     useEffect(() => {
         setUser(localStorage.getItem("user"))
-        //populateFeeTypes()
         retrieveFeeTypes()
     }, []);
 
@@ -72,7 +75,7 @@ export default function FeeTypes() {
                         <TextField id="outlined-basic" label="makseviis" variant="outlined" />
                     <TextField id="filled-basic" label="märkused" variant="outlined" />
                     <Button
-                        onClick={handleClose}
+                        onClick={addNewFeeType}
                         type="submit"
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
