@@ -9,6 +9,11 @@ namespace ManyEvents.Models
 		[StringLength(11)]
 		public string Code { get; set; }
 
+		public PersonalCode(string code)
+		{
+			Code = code;
+		}
+
 	}
 }
 
