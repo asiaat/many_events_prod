@@ -51,6 +51,9 @@ namespace ManyEvents.Controllers
                 .Add(ftype);
 
             _context.SaveChanges();
+
+            Log.Information("MFeeTypesController::CreateNewFeeType "+
+                ftype.Name + " , "+ ftype.Remarks);
             
             return new MFeeTypeDto
             {
@@ -99,6 +102,7 @@ namespace ManyEvents.Controllers
             };
         }
 
+
         // GET: MFeeTypes
         public async Task<IActionResult> Index()
         {
@@ -126,28 +130,8 @@ namespace ManyEvents.Controllers
         }
 
         
-        
-        // GET: MFeeTypes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.MFeeType == null)
-            {
-                return NotFound();
-            }
-
-            var mFeeType = await _context.MFeeType
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (mFeeType == null)
-            {
-                return NotFound();
-            }
-
-            return View(mFeeType);
-        }
-
-        // POST: MFeeTypes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpDelete]
+        [Route("delete/{id:int}")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.MFeeType == null)

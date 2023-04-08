@@ -38,17 +38,25 @@ export default function FeeTypes() {
                 setFeeTypes(response.data)
             })
     }
-    const addNewFeeType = async () => {
-        const newFeeType = { name: 'Bitcoins', remarks : 'BTC' };
+
+    
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const newFeeType = {
+            name: data.get('feename'),
+            remarks: data.get('feeremarks')
+        };
         await axios.post("https://localhost:44450/api/mfeetypes/new",
-                            newFeeType)
+            newFeeType)
             .then((response) => {
                 console.log(response.data);
-                //setFeeTypes(response.data)
+
             })
 
         handleClose()
-    }
+
+    };
 
     useEffect(() => {
         setUser(localStorage.getItem("user"))
@@ -71,16 +79,24 @@ export default function FeeTypes() {
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                         
                     </Typography>
-                    Uue makseviisi lisamine
-                        <TextField id="outlined-basic" label="makseviis" variant="outlined" />
-                    <TextField id="filled-basic" label="märkused" variant="outlined" />
-                    <Button
-                        onClick={addNewFeeType}
-                        type="submit"
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
+                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                        Uue makseviisi lisamine
+                        <TextField id="feename"
+                            name="feename"
+                            label="makseviis"
+                            variant="outlined" />
+                        <TextField id="feeremarks"
+                            name = "feeremarks"
+                            label="märkused"
+                            variant="outlined" />
+                        <Button
+                            
+                            type="submit"
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
 
-                    >Salvesta</Button>
+                            >Salvesta</Button>
+                    </Box>
                 </Box>
             </Modal>
         );
