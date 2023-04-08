@@ -27,7 +27,7 @@ namespace ManyEvents.Controllers
         [Route("feetypes")]
         public IEnumerable<MFeeTypeDto> GetMEvents()
         {
-            Log.Information("MFeeTypesController::GetMEvents");
+            //Log.Information("MFeeTypesController::GetMEvents");
 
 
             var list = _context.MFeeType

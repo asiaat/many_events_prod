@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
 import axios from "axios";
 
 
@@ -23,19 +24,28 @@ const style = {
 
 export default function FeeTypes() {
 
-    const [displayName, setDisplauName] = useState("Fee Types");
-    const [user, setUser] = useState();
+    const [displayName, setDisplauName]         = useState("Fee Types");
+    const [user, setUser]                       = useState();
     const [feeTypes, setFeeTypes] = useState([]);
-    const [open, setOpen] = useState(false);
-    const [openDelModal, setOpenDelModal] = useState(false);
-    const [feeID, setFeeID] = useState();
 
+    const [open, setOpen]                       = useState(false);
+    const [openDelModal, setOpenDelModal]       = useState(false);
+    const [openChangeModal, setOpenChangeModal] = useState(false);
 
-    const handleOpen = () => setOpen(true);
+    const [feeID, setFeeID]                     = useState();
+
+    const [feeTypeID, setFeeTypeID]             = useState();
+    const [feeTypeName, setFeeTypeName]         = useState();
+    const [feeTypeRemarks, setFeeTypeRemarks]   = useState();
+
+    const handleOpen  = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const handleOpenDelModal = () => setOpenDelModal(true);
+    const handleOpenDelModal  = () => setOpenDelModal(true);
     const handleCloseDelModal = () => setOpenDelModal(false);
+
+    const handleOpenChangeModal  = () => setOpenChangeModal(true);
+    const handleCloseChangeModal = () => setOpenChangeModal(false);
    
 
     const retrieveFeeTypes = async () => {
@@ -65,6 +75,53 @@ export default function FeeTypes() {
 
     };
 
+    const handleChange = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const feeType = {
+            id: data.get('feetypeid'),
+            name: data.get('feetypename'),
+            remarks: data.get('feetyperemarks')
+        };
+
+        console.log(feeType);
+
+        setFeeTypeID(feeType.id);
+        setFeeTypeName(feeType.name);
+        setFeeTypeRemarks(feeType.remarks);
+
+        handleOpenChangeModal();
+
+    };
+
+    const handleSaveChanges = async (event) => {
+        event.preventDefault();
+        
+        const data = new FormData(event.currentTarget);
+        var objectID = feeTypeID;
+        const updatedFeeType = {
+            id: feeTypeID ,
+            name: data.get('feetypename'),
+            remarks: data.get('feetyperemarks')
+        };
+        
+
+        console.log(updatedFeeType);
+        console.log(feeTypeID);
+
+        
+        await axios.put("https://localhost:44450/api/mfeetypes/update",
+            updatedFeeType)
+            .then((response) => {
+                console.log(response.data);
+
+            })
+        
+
+        handleCloseChangeModal();
+
+    };
+
     const handleDelete = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -81,7 +138,6 @@ export default function FeeTypes() {
 
             })
         
-
         //handleCloseDelModal()
 
     };
@@ -125,6 +181,51 @@ export default function FeeTypes() {
     }
 
 
+    const renderModalChange = () => {
+        return (
+            <Modal
+                open={openChangeModal}
+                onClose={handleCloseChangeModal}
+                aria-labelledby="modal-change-title"
+                aria-describedby="modal-change-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-change-title" variant="h6" component="h2">
+                        Text in a modal
+                    </Typography>
+                    <Typography id="modal-change-description" sx={{ mt: 2 }}>
+
+                    </Typography>
+                    <Box component="form" onSubmit={handleSaveChanges} noValidate sx={{ mt: 1 }}>
+                        Uue makseviisi lisamine
+                         
+                        <TextField id="feename"
+                            name="feetypename"
+                            label="makseviis"
+                            variant="outlined"
+                            defaultValue={feeTypeName}
+                            
+                        />
+                        <TextField id="feeremarks"
+                            name="feetyperemarks"
+                            label="märkused"
+                            variant="outlined"
+                            defaultValue={feeTypeRemarks}
+                            
+                        />
+
+                        <Button
+
+                            type="submit"
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+
+                        >Salvesta muudatused</Button>
+                    </Box>
+                </Box>
+            </Modal>
+        );
+    }
 
 
     const renderModal = () => {
@@ -181,6 +282,7 @@ export default function FeeTypes() {
                     >Lisa uus makseviis</Button>
                     {renderModal()}
                     {renderDelModal()}
+                    {renderModalChange()}
 
 
                 <table className="table table-striped" aria-labelledby="tableLabel">
@@ -198,7 +300,23 @@ export default function FeeTypes() {
                                 <td>{ftypes.name}</td>
                                 <td>{ftypes.remarks}</td>
                                 <td>
-                                    <Box component="form" onSubmit={handleDelete} noValidate sx={{ mt: 1 }}>
+                                    <Box component="form" onSubmit={handleChange} noValidate sx={{ mt: 0.5 }}>
+
+                                        <input type="hidden" id="feetypeid" name="feetypeid" value={ftypes.id} />
+                                        <input type="hidden" id="feetypename" name="feetypename" value={ftypes.name} />
+                                        <input type="hidden" id="feetyperemarks" name="feetyperemarks" value={ftypes.remarks} />
+
+                                        <Button
+
+                                            type="submit"
+                                            variant="contained"
+                                            sx={{ mt: 0.1, mb: 0.25 }}
+
+                                        >Muuda <CreateOutlinedIcon /></Button>
+                                    </Box>
+                                </td>
+                                <td>
+                                    <Box component="form" onSubmit={handleDelete} noValidate sx={{ mt: 0.5 }}>
                                         
                                         <input type="hidden" id="feetypeid" name="feetypeid" value={ftypes.id} />
 
@@ -206,11 +324,12 @@ export default function FeeTypes() {
 
                                             type="submit"
                                             variant="contained"
-                                            sx={{ mt: 0.2, mb: 0.25 }}
+                                            sx={{ mt: 0.1, mb: 0.25 }}
 
-                                        >Eemalda</Button>
+                                        >Kustuta <DeleteForeverOutlinedIcon /> </Button>
                                     </Box>
                                 </td>
+                                
 
                             </tr>
                         )}
