@@ -142,10 +142,16 @@ namespace ManyEvents.Controllers
             if (mFeeType != null)
             {
                 _context.MFeeType.Remove(mFeeType);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
             }
             
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            
+            
         }
 
         private bool MFeeTypeExists(int id)
