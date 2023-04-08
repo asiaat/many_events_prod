@@ -31,20 +31,24 @@ namespace ManyEvents.Controllers
 
             Log.Information("MPersonController::GetMPersons ");
 
+            //var evenList = 
             var list = _context.MPerson
                 .Select(f => new MPersonDto
                 {
                     Id = f.Id,
                     FirstName = f.FirstName,
                     LastName = f.LastName,
-                    /*
-                    PersonalCode = new PersonalCode
-                    {
-                        Code = f.PersonalCode.Code,
+                    PersonalCodeAsString = f.PersonalCode.Code,
 
-                    },
-                    */
-                   
+                    EventsList = f.EventsList.Select(
+                        e => new MEventDto
+                        {
+                            Id = e.Id,
+                            Title = e.Title,
+                            Place = e.Place,
+                            Price = e.Price
+
+                        }).ToList()
 
                 }).ToList();
 
@@ -69,17 +73,13 @@ namespace ManyEvents.Controllers
             return View(mPerson);
         }
 
-        // GET: MPerson/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+        
 
 
         // POST: MFeeTypes/Create
         [HttpPost]
         [Route("create")]
-        public string CreateNewPerson(ProbeClass person)
+        public string CreateNewPerson(MPersonDto person)
         {
             Log.Information("MPersonController::CreateNewPerson " +
                 person.FirstName + " " +person.LastName);
@@ -99,6 +99,44 @@ namespace ManyEvents.Controllers
 
             return "OK";
             
+        }
+
+        [HttpPut]
+        [Route("update")]
+        public MPersonDto UpdatePerson(MPersonDto person)
+        {
+            var foundPerson = _context.MPerson
+                .Where(p => p.Id == person.Id)
+                .FirstOrDefault();
+
+            if (foundPerson is null)
+            {
+                string msg = "Cant found the person with id: " +
+                    person.Id.ToString();
+
+                Log.Error(msg);
+
+                throw new Exception(msg);
+            }
+
+            if (foundPerson.FirstName is not null)
+            {
+                foundPerson.SetFirstName(person.FirstName);
+            }
+
+            if (foundPerson.LastName is not null)
+            {
+                foundPerson.SetLastName(person.LastName);
+            }
+
+            _context.SaveChanges();
+
+            return new MPersonDto
+            {
+                
+                FirstName = person.FirstName,
+                LastName = person.LastName,
+            };
         }
 
         // GET: MPerson/Edit/5

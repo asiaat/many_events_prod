@@ -6,12 +6,16 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
 
 const context = [
     "/api/mevents",
+    "/api/mevents/create",
+    "/api/mevents/bind",
     "/api/mfeetypes/feetypes",
     "/api/mfeetypes/new",
     "/api/mfeetypes/update",
     "/api/mfeetypes/delete",
     "/api/mpersons/persons",
     "/api/mpersons/create",
+    "/api/mpersons/update",
+    
 ];
 
 const onError = (err, req, resp, target) => {

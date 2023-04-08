@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ManyEvents.Data;
 using ManyEvents.Models;
 using ManyEvents.API.Dto;
+using Serilog;
 
 namespace ManyEvents.Controllers
 {
@@ -31,7 +32,19 @@ namespace ManyEvents.Controllers
                 .Select(e => new MEventDto
                 {
                     Id = e.Id,
-                    Title = e.Title
+                    Title = e.Title,
+                    Place = e.Place,
+                    ReleaseDate = e.ReleaseDate,
+                    Price = e.Price,
+
+                    PersonsList = e.MPersons.Select(
+                        p => new MPersonDto
+                        {
+                            Id = p.Id,
+                            FirstName = p.FirstName,
+                            LastName = p.LastName,
+                            PersonalCodeAsString = p.PersonalCode.Code,
+                        }).ToList(),
 
                 }).ToList();
 
@@ -70,20 +83,71 @@ namespace ManyEvents.Controllers
             return View();
         }
 
-        // POST: MEvents/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Price")] MEvent mEvent)
+        [Route("create")]
+        public string CreateNewPerson(MEvent mevent)
         {
-            if (ModelState.IsValid)
+            Log.Information("MPersonController::CreateNewPerson " +
+                mevent.Title + " " + mevent.Place);
+
+            /*
+            var foundEvent = _context.MEvent
+                .Include(e => e.Id == 1)
+                .Single();
+
+            var person = _context.MPerson
+                .Include(p => p.Id == 1)
+                .Single();
+
+            foundEvent.MPersons.Add(person);
+            */
+
+
+            _context.Add(mevent);
+            _context.SaveChanges();
+
+            return "OK";
+
+        }
+
+        [HttpGet]
+        [Route("bind")]
+        public string BindEventWithPerson()
+        {
+           
+            var foundEvent = _context.MEvent
+                .Where(e => e.Id == 2)
+                .FirstOrDefault();
+
+            var person = _context.MPerson
+                .Where(p => p.Id == 1)
+                .FirstOrDefault();
+
+            if(foundEvent is not null && person is not null)
             {
-                _context.Add(mEvent);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //foundEvent.MPersons.Add(person);
+                /*
+                var newEvenT = new MEvent
+                {
+                    Id = foundEvent.Id,
+                    Title = foundEvent.Title,
+                    Place = foundEvent.Place,
+                    Price = foundEvent.Price,
+                    ReleaseDate = foundEvent.ReleaseDate
+
+                };
+                */
+                person.EventsList
+                    .Add(foundEvent);
+
+                _context.SaveChanges();
             }
-            return View(mEvent);
+
+            
+
+            return "OK";
+
         }
 
         // GET: MEvents/Edit/5

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using ManyEvents.Migrations;
 
 namespace ManyEvents.Models
 {
@@ -14,10 +15,12 @@ namespace ManyEvents.Models
         [StringLength(1500)]
         public string Remarks { get; set; }
 
+        public virtual ICollection<MEvent> EventsList { get; set; }
 
         public MPerson()
         {
             Remarks = "";
+            EventsList = new HashSet<MEvent>();
         }
 
         public void SetFirstName(string firstName)
