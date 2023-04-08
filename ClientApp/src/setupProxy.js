@@ -10,6 +10,7 @@ const context = [
     "/api/mfeetypes/feetypes",
     "/api/mfeetypes/new",
     "/api/mfeetypes/update",
+    "/api/mfeetypes/delete",
 ];
 
 const onError = (err, req, resp, target) => {
