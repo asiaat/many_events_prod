@@ -132,7 +132,7 @@ namespace ManyEvents.Controllers
         
         [HttpDelete]
         [Route("delete/{id:int}")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (_context.MFeeType == null)
             {
@@ -143,6 +143,10 @@ namespace ManyEvents.Controllers
             {
                 _context.MFeeType.Remove(mFeeType);
                 await _context.SaveChangesAsync();
+
+                Log.Information("MFeeTypesController::Delete (" +
+                 mFeeType.Name + " , " + mFeeType.Remarks + ") was deleted");
+
                 return Ok();
             }
             else

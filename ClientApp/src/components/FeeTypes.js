@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import axios from "axios";
 
 
@@ -25,10 +26,16 @@ export default function FeeTypes() {
     const [displayName, setDisplauName] = useState("Fee Types");
     const [user, setUser] = useState();
     const [feeTypes, setFeeTypes] = useState([]);
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const [openDelModal, setOpenDelModal] = useState(false);
+    const [feeID, setFeeID] = useState();
+
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const handleOpenDelModal = () => setOpenDelModal(true);
+    const handleCloseDelModal = () => setOpenDelModal(false);
    
 
     const retrieveFeeTypes = async () => {
@@ -58,10 +65,66 @@ export default function FeeTypes() {
 
     };
 
+    const handleDelete = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        
+
+        var objId = data.get("feetypeid");
+        var url = "https://localhost:44450/api/mfeetypes/delete/" + objId;
+
+        console.log(url);
+        
+        await axios.delete(url)
+            .then((response) => {
+                console.log(response.data);
+
+            })
+        
+
+        //handleCloseDelModal()
+
+    };
+
     useEffect(() => {
         setUser(localStorage.getItem("user"))
         retrieveFeeTypes()
     }, []);
+
+
+    const renderDelModal = () => {
+        return (
+            <Modal
+                open={openDelModal}
+                onClose={handleCloseDelModal}
+                aria-labelledby="modal-del-title"
+                aria-describedby="modal-del-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-del-title" variant="h6" component="h2">
+                        Text in a modal
+                    </Typography>
+                    <Typography id="modal-del-description" sx={{ mt: 2 }}>
+
+                    </Typography>
+                    <Box component="form" onSubmit={handleDelete} noValidate sx={{ mt: 1 }}>
+                        Kas soovite makseviisi eemaldada?
+                        (Kustutatakse tabelist)
+                         
+                        <Button
+
+                            type="submit"
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+
+                        >Eemalda</Button>
+                    </Box>
+                </Box>
+            </Modal>
+        );
+    }
+
+
 
 
     const renderModal = () => {
@@ -89,6 +152,7 @@ export default function FeeTypes() {
                             name = "feeremarks"
                             label="märkused"
                             variant="outlined" />
+
                         <Button
                             
                             type="submit"
@@ -116,6 +180,7 @@ export default function FeeTypes() {
 
                     >Lisa uus makseviis</Button>
                     {renderModal()}
+                    {renderDelModal()}
 
 
                 <table className="table table-striped" aria-labelledby="tableLabel">
@@ -132,6 +197,20 @@ export default function FeeTypes() {
                             <tr key={ftypes.id}>
                                 <td>{ftypes.name}</td>
                                 <td>{ftypes.remarks}</td>
+                                <td>
+                                    <Box component="form" onSubmit={handleDelete} noValidate sx={{ mt: 1 }}>
+                                        
+                                        <input type="hidden" id="feetypeid" name="feetypeid" value={ftypes.id} />
+
+                                        <Button
+
+                                            type="submit"
+                                            variant="contained"
+                                            sx={{ mt: 0.2, mb: 0.25 }}
+
+                                        >Eemalda</Button>
+                                    </Box>
+                                </td>
 
                             </tr>
                         )}
