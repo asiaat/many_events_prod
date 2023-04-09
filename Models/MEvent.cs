@@ -12,6 +12,7 @@ namespace ManyEvents.Models
         public DateTime ReleaseDate { get; set; }
         public string? Place { get; set; }
         public decimal Price { get; set; }
+        public MFeeType EventFeeType { get; set; }
 
         public MEvent()
         {
@@ -20,6 +21,30 @@ namespace ManyEvents.Models
 
         public virtual ICollection<MPerson> MPersons { get; set; }
 
+        public void SetFeeType(MFeeType feeType)
+        {
+            EventFeeType = feeType;
+        }
+
+        public void SetTitle(string title)
+        {
+            Title = title;
+        }
+
+        public void SetPlace(string place)
+        {
+            Place = place;
+        }
+
+        public void SetPrice(decimal price)
+        {
+            Price = price;
+        }
+
+        public void SetReleaseDate(DateTime dateTime)
+        {
+            ReleaseDate = dateTime;
+        }
 
 
     }

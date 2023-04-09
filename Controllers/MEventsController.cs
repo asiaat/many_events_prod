@@ -36,6 +36,12 @@ namespace ManyEvents.Controllers
                     Place = e.Place,
                     ReleaseDate = e.ReleaseDate,
                     Price = e.Price,
+                    EventFeeType = new MFeeTypeDto
+                    {
+                        Id = e.EventFeeType.Id,
+                        Name = e.EventFeeType.Name,
+                        Remarks = e.EventFeeType.Remarks
+                    },
 
                     PersonsList = e.MPersons.Select(
                         p => new MPersonDto
@@ -86,25 +92,23 @@ namespace ManyEvents.Controllers
         
         [HttpPost]
         [Route("create")]
-        public string CreateNewPerson(MEvent mevent)
+        public string CreateNewPerson(MEventDto mevent)
         {
             Log.Information("MPersonController::CreateNewPerson " +
                 mevent.Title + " " + mevent.Place);
 
-            /*
-            var foundEvent = _context.MEvent
-                .Include(e => e.Id == 1)
-                .Single();
+            var newEvent = new MEvent();
+            newEvent.SetTitle(mevent.Title);
+            newEvent.SetPlace(mevent.Place);
+            newEvent.SetPrice(mevent.Price);
+            newEvent.SetReleaseDate(mevent.ReleaseDate);
 
-            var person = _context.MPerson
-                .Include(p => p.Id == 1)
-                .Single();
+            var feeType = _context.MFeeType
+                .FirstOrDefault();
 
-            foundEvent.MPersons.Add(person);
-            */
+            newEvent.SetFeeType(feeType);
 
-
-            _context.Add(mevent);
+            _context.Add(newEvent);
             _context.SaveChanges();
 
             return "OK";

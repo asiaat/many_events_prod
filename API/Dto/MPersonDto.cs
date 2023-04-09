@@ -12,7 +12,7 @@ namespace ManyEvents.API.Dto
         public string PersonalCodeAsString { get; set; }
         //public string Remarks { get; set; }
 
-        public virtual IList<MEventDto> EventsList { get; set; }
+        public virtual IList<MEventDto>? EventsList { get; set; }
     }
 }
 

@@ -11,8 +11,9 @@ namespace ManyEvents.API.Dto
         public DateTime ReleaseDate { get; set; }
         public string? Place { get; set; }
         public decimal Price { get; set; }
+        public MFeeTypeDto? EventFeeType { get; set; }
 
-        public virtual IList<MPersonDto> PersonsList { get; set; }
+        public virtual IList<MPersonDto>? PersonsList { get; set; }
     }
 }
 
