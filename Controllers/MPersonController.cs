@@ -161,30 +161,9 @@ namespace ManyEvents.Controllers
             return View(mPerson);
         }
 
-        
-
-        // GET: MPerson/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.MPerson == null)
-            {
-                return NotFound();
-            }
-
-            var mPerson = await _context.MPerson
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (mPerson == null)
-            {
-                return NotFound();
-            }
-
-            return View(mPerson);
-        }
-
-        // POST: MPerson/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpDelete]
+        [Route("delete/{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
             if (_context.MPerson == null)
             {
@@ -194,10 +173,20 @@ namespace ManyEvents.Controllers
             if (mPerson != null)
             {
                 _context.MPerson.Remove(mPerson);
+                await _context.SaveChangesAsync();
+
+                Log.Information("MPersonController::Delete (" +
+                 mPerson.FirstName + " , " + mPerson.LastName + ") was deleted");
+
+                return Ok();
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                return NotFound();
+            }
+
+
+
         }
 
         private bool MPersonExists(int id)
