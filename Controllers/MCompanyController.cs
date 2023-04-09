@@ -37,7 +37,7 @@ namespace ManyEvents.Controllers
         public IEnumerable<MCompanyDto> GetCompanies()
         {
 
-            Log.Information("MPersonController::GetMPersons ");
+            Log.Information("MCompanyController::GetCompanies ");
 
             //var evenList = 
             var list = _context.MCompany
@@ -89,10 +89,30 @@ namespace ManyEvents.Controllers
             return View(mCompany);
         }
 
-        // GET: MCompany/Create
-        public IActionResult Create()
+        [HttpPost]
+        [Route("create")]
+        public string CreateNewCompany(MCompanyDto company)
         {
-            return View();
+            Log.Information("MPersonController::        public string CreateNewCompany(MCompanyDto company)\r\n " +
+                company.JurName + " " + company.RegCode);
+
+            var newComp = new MCompany();
+
+            newComp.SetJurName(company.JurName);
+            newComp.SetReqCode(company.RegCode);
+            newComp.SetGuestsCount(10);
+            
+
+            var feeType = _context.MFeeType
+                .FirstOrDefault();
+
+            newComp.SetFeeType(feeType);
+
+            _context.Add(newComp);
+            _context.SaveChanges();
+
+            return "OK";
+
         }
 
         // POST: MCompany/Create

@@ -44,6 +44,9 @@ export default function Header() {
                             <li className="border-b border-gray-400 my-8 uppercase">
                                 <a href="/guests">Osavõtjad</a>
                             </li>
+                            <li className="border-b border-gray-400 my-8 uppercase">
+                                <a href="/companies">Firmad</a>
+                            </li>
                             
                             <li className="border-b border-gray-400 my-8 uppercase">
                                 <a href="/feetypes">Maksevõimalused</a>
@@ -62,6 +65,9 @@ export default function Header() {
                     </li>
                     <li>
                         <a href="/guests">Osavõtjad</a>
+                    </li>
+                    <li>
+                        <a href="/companies">Firmad</a>
                     </li>
                     
                     <li>

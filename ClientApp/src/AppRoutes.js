@@ -4,6 +4,7 @@ import { Home } from "./components/Home";
 import Login from "./components/Login/Login";
 import Event from "./components/Events";
 import Persons from "./components/Persons";
+import Companies from "./components/Companies";
 
 const AppRoutes = [
   {
@@ -26,6 +27,10 @@ const AppRoutes = [
     {
         path: '/guests',
         element: <Persons />
+    },
+    {
+        path: '/companies',
+        element: <Companies />
     },
 
 ];

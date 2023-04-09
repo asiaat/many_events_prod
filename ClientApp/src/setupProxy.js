@@ -17,6 +17,7 @@ const context = [
     "/api/mpersons/update",
     "/api/mpersons/delete",
     "/api/mcompanies/companies",
+    "/api/mcompanies/create"
     
 ];
 
