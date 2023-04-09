@@ -50,6 +50,8 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     const [guest, setGuest] = useState();
     const [eventId, setEventId] = useState();
 
+    const [persons, setPersons] = useState([]);
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const handleGuestOpen = () => setOpenGuest(true);
@@ -91,6 +93,20 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 
     };
 
+    const retrievePersons = async () => {
+        await axios.get("https://localhost:44450/api/mpersons/persons")
+            .then((response) => {
+                console.log(response.data);
+                setPersons(response.data);
+
+            })
+    }
+
+    useEffect(() => {
+        
+        retrievePersons()
+
+    }, []);
     
 
     const renderGuestModal = () => {
@@ -118,9 +134,14 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                                 label="Age"
                                 onChange={handleChange}
                             >
-                                <MenuItem value={3}>Kolm</MenuItem>
-                                <MenuItem value={4}>Neli</MenuItem>
-                                <MenuItem value={8}>Kaheksa</MenuItem>
+                                
+
+                                {persons.map((person) => (
+                                    <MenuItem value={person.id}>                                    
+                                        {person.firstName}  {person.lastName}  {person.personalCodeAsString}    
+                                    </MenuItem>
+                                ))}
+
                             </Select>
                         </FormControl>
                     </Box>
