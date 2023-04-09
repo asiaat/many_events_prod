@@ -2,7 +2,8 @@ import { Counter } from "./components/Counter";
 import FeeTypes  from "./components/FeeTypes";
 import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
-import  Login  from "./components/Login/Login";
+import Login from "./components/Login/Login";
+import Event from "./components/Events";
 
 const AppRoutes = [
   {
@@ -25,7 +26,10 @@ const AppRoutes = [
         path: '/login',
         element: <Login />
     },
-    
+    {
+        path: '/events',
+        element: <Event />
+    },
 
 ];
 

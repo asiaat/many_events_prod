@@ -42,6 +42,7 @@ namespace ManyEvents.Controllers
                         Name = e.EventFeeType.Name,
                         Remarks = e.EventFeeType.Remarks
                     },
+                    GuestCount = e.MPersons.Count(),
 
                     PersonsList = e.MPersons.Select(
                         p => new MPersonDto
@@ -130,18 +131,7 @@ namespace ManyEvents.Controllers
 
             if(foundEvent is not null && person is not null)
             {
-                //foundEvent.MPersons.Add(person);
-                /*
-                var newEvenT = new MEvent
-                {
-                    Id = foundEvent.Id,
-                    Title = foundEvent.Title,
-                    Place = foundEvent.Place,
-                    Price = foundEvent.Price,
-                    ReleaseDate = foundEvent.ReleaseDate
-
-                };
-                */
+                
                 person.EventsList
                     .Add(foundEvent);
 
@@ -149,6 +139,35 @@ namespace ManyEvents.Controllers
             }
 
             
+
+            return "OK";
+
+        }
+
+        [HttpGet]
+        [Route("addguest/{eventId:int}/{personId:int}")]
+        public string AddGuest(int eventid, int personid)
+        {
+
+            var foundEvent = _context.MEvent
+                .Where(e => e.Id == eventid)
+                .FirstOrDefault();
+
+            var person = _context.MPerson
+                .Where(p => p.Id == personid)
+                .FirstOrDefault();
+
+
+            if (foundEvent is not null && person is not null)
+            {
+
+                person.EventsList
+                    .Add(foundEvent);
+
+                _context.SaveChanges();
+            }
+
+
 
             return "OK";
 
