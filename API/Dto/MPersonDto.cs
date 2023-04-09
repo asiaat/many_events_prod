@@ -10,7 +10,8 @@ namespace ManyEvents.API.Dto
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PersonalCodeAsString { get; set; }
-        //public string Remarks { get; set; }
+        public string? Remarks { get; set; }
+        public MFeeTypeDto? FeeType { get; set; }
 
         public virtual IList<MEventDto>? EventsList { get; set; }
     }

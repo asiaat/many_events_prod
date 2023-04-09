@@ -186,21 +186,25 @@ export default function Persons() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        const newEvent = {
-            title: data.get('eventname'),
-            place: data.get('eventplace'),
-            releaseDate: data.get('eventtime'),
+        
+      
 
-        };
-        console.log(newEvent)
+        const newPerson = {
 
-        await axios.post("https://localhost:44450/api/mevents/create",
-            newEvent)
+            firstName: data.get('firstName'),
+            lastName: data.get('lastName'),
+            personalCodeAsString: data.get('personalCodeAsString'),
+
+        }
+        console.log(newPerson)
+
+        await axios.post("https://localhost:44450/api/mpersons/create",
+            newPerson)
             .then((response) => {
                 console.log(response.data);
 
             })
-
+        
 
         handleClose()
     }
@@ -230,24 +234,24 @@ export default function Persons() {
             >
                 <Box sx={style}>
                     <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Uus üritus
+                        Uus Külastaja
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
 
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         Uue makseviisi lisamine
-                        <TextField id="eventname"
-                            name="eventname"
-                            label="ürituse nimi"
+                        <TextField id="firstName"
+                            name="firstName"
+                            label="eesnimi"
                             variant="outlined" />
-                        <TextField id="eventplace"
-                            name="eventplace"
-                            label="Asukoht"
+                        <TextField id="lastName"
+                            name="lastName"
+                            label="perekonnanimi"
                             variant="outlined" />
-                        <TextField id="eventtime"
-                            name="eventtime"
-                            label="Aeg"
+                        <TextField id="personalCodeAsString"
+                            name="personalCodeAsString"
+                            label="isikukood"
                             variant="outlined" />
 
                         <Button
@@ -278,7 +282,7 @@ export default function Persons() {
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
 
-                    >Lisa uus üritus</Button>
+                    >Lisa uus külastaja</Button>
                 </h1>
             );
         }
@@ -299,7 +303,7 @@ export default function Persons() {
                             <TableCell align="right">Eesnimi</TableCell>
                             <TableCell align="right">Perekonnanimi</TableCell>
                             <TableCell align="right">Makseviis</TableCell>
-                            <TableCell align="right">Külastajate arv</TableCell>
+                           
                             <TableCell align="right"></TableCell>
                         </TableRow>
                     </TableHead>

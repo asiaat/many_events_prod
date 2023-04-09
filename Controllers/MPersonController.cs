@@ -39,6 +39,12 @@ namespace ManyEvents.Controllers
                     FirstName = f.FirstName,
                     LastName = f.LastName,
                     PersonalCodeAsString = f.PersonalCode.Code,
+                    FeeType = new MFeeTypeDto
+                    {
+                        Id = f.FeeType.Id,
+                        Name = f.FeeType.Name,
+                        Remarks = f.FeeType.Remarks,
+                    },
 
                     EventsList = f.EventsList.Select(
                         e => new MEventDto
