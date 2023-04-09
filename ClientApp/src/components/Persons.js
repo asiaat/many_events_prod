@@ -37,35 +37,41 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
     const [openGuest, setOpenGuest] = React.useState(false);
+    const [openDelGuest, setOpenDelGuest] = React.useState(false);
 
     const [user, setUser] = useState();
+    const [personId, setPersonId] = useState();
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const handleGuestOpen = () => setOpenGuest(true);
     const handleGuestClose = () => setOpenGuest(false);
+    const handleDelGuestOpen = () => setOpenDelGuest(true);
+    const handleDelGuestClose = () => setOpenDelGuest(false);
 
 
     const handleGuestSubmit = async (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-
-        const newGuest = {
-            title: data.get('eventname'),
-            place: data.get('eventplace'),
-            releaseDate: data.get('eventtime'),
-
-        };
-        console.log(newGuest)
-
-        await axios.get("https://localhost:44450/api/mevents/addguest/2/2")
+ 
+        await axios.delete("https://localhost:44450/api/mpersons/delete/" + personId)
             .then((response) => {
                 console.log(response.data);
-
+                handleDelGuestClose()
             })
 
+        //handleGuestClose()
 
-        handleGuestClose()
+    };
+
+    const handleGuestDeleteDialog = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+
+        var guestId = data.get('guestid')
+        console.log("Guest Id: " + guestId);
+        setPersonId(guestId);
+
+        handleDelGuestOpen()
 
     };
 
@@ -110,10 +116,53 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     }
 
 
+    const renderDelModal = () => {
+        return (
+            <Modal
+                open={openDelGuest}
+                onClose={handleDelGuestClose}
+                aria-labelledby="modal-guest-title"
+                aria-describedby="modal-guest-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-guest-title" variant="h6" component="h2">
+                       Isiku eemaldamine kogu andmebaasist
+                    </Typography>
+                    <Typography id="modal-guest-description" sx={{ mt: 2 }}>
+
+                    </Typography>
+                    <Box noValidate sx={{ mt: 1 }}>
+                        Kas soovite isikut eemaldada? (kustutatakse isiku andmed ja tema seotus üritustega)                        
+
+                        <Box component="form" onSubmit={handleGuestSubmit}>
+                        
+                            <Button 
+                                
+                                type="submit"
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+
+                            >Eemalda</Button>
+                        </Box>
+                        
+                        <Button
+                            onClick={handleDelGuestClose}
+                            type="submit"
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+
+                        >Ära eemalda</Button>
+                    </Box>
+                </Box>
+            </Modal>
+        );
+    }
+
 
     return (
         <React.Fragment>
             {renderGuestModal()}
+            {renderDelModal()}
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <IconButton
@@ -129,6 +178,19 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                 </TableCell>
                 <TableCell align="right">{row.lastName}</TableCell>
                 <TableCell align="right">{row.personalCodeAsString}</TableCell>
+                <TableCell align="right" >
+                    <Box component="form" onSubmit={handleGuestDeleteDialog}>
+                        <input type="hidden" name="guestid" value={row.id} />
+                        <Button
+                        
+                            type="submit"
+                            variant="contained"
+                            sx={{ mt: .12, mb: .12 }}
+
+                            >eemalda</Button>
+                     </Box>
+                </TableCell>
+                
                 
                 
 
