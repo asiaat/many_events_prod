@@ -12,6 +12,7 @@ namespace ManyEvents.API.Dto
         public string? Remarks { get; set; }
         public MFeeTypeDto? FeeType { get; set; }
 
+
         public virtual IList<MEventDto>? EventsList { get; set; }
     }
 }

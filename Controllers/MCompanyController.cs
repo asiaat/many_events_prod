@@ -31,6 +31,7 @@ namespace ManyEvents.Controllers
                           Problem("Entity set 'DBContext.MCompany'  is null.");
         }
 
+
         [HttpGet]
         [Route("companies")]
         public IEnumerable<MCompanyDto> GetCompanies()
