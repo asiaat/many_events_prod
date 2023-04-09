@@ -59,8 +59,6 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                 handleDelGuestClose()
             })
 
-        //handleGuestClose()
-
     };
 
     const handleGuestDeleteDialog = async (event) => {
@@ -364,9 +362,9 @@ export default function Persons() {
                             <TableCell> Isikukood</TableCell>
                             <TableCell align="right">Eesnimi</TableCell>
                             <TableCell align="right">Perekonnanimi</TableCell>
-                            <TableCell align="right">Makseviis</TableCell>
-                           
                             <TableCell align="right"></TableCell>
+                           
+                            
                         </TableRow>
                     </TableHead>
                     <TableBody>

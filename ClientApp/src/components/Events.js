@@ -17,6 +17,13 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import CreateOutlinedIcon from '@mui/icons-material/CreateOutlined';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+
+
+
 
 import axios from "axios";
 
@@ -37,8 +44,11 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
     const [openGuest, setOpenGuest] = React.useState(false);
+    const [age, setAge] = React.useState('');
 
     const [user, setUser] = useState();
+    const [guest, setGuest] = useState();
+    const [eventId, setEventId] = useState();
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -46,29 +56,42 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     const handleGuestClose = () => setOpenGuest(false);
 
 
-
     const handleGuestSubmit = async (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
 
-        const newGuest = {
-            title: data.get('eventname'),
-            place: data.get('eventplace'),
-            releaseDate: data.get('eventtime'),
 
-        };
-        console.log(newGuest)
+        console.log("eventId: " + eventId + " , guestId:" + age)
 
-        await axios.get("https://localhost:44450/api/mevents/addguest/5/2")
+
+        await axios.get("https://localhost:44450/api/mevents/addguest/" + eventId + "/" +age)
             .then((response) => {
                 console.log(response.data);
 
             })
-
+        
 
         handleGuestClose()
 
     };
+
+    const handleChange = (event: SelectChangeEvent) => {
+        setAge(event.target.value);
+        console.log("age: " + age);
+    };
+
+    const handleEventSelect = (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+
+        var eventId = data.get('eventid')
+        console.log("handleEventSelect eventId: " + eventId);
+        setEventId(eventId);
+
+        handleGuestOpen()
+
+    };
+
+    
 
     const renderGuestModal = () => {
         return (
@@ -85,17 +108,25 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                     <Typography id="modal-guest-description" sx={{ mt: 2 }}>
 
                     </Typography>
+                    <Box sx={{ minWidth: 120 }}>
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={age}
+                                label="Age"
+                                onChange={handleChange}
+                            >
+                                <MenuItem value={3}>Kolm</MenuItem>
+                                <MenuItem value={4}>Neli</MenuItem>
+                                <MenuItem value={8}>Kaheksa</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+
                     <Box component="form" onSubmit={handleGuestSubmit} noValidate sx={{ mt: 1 }}>
-                        Külastaja
-                        
-                        <TextField id="feename"
-                            name="feename"
-                            label="makseviis"
-                            variant="outlined" />
-                        <TextField id="feeremarks"
-                            name="feeremarks"
-                            label="märkused"
-                            variant="outlined" />
+                        Külastaja      
 
                         <Button
 
@@ -133,13 +164,16 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                 <TableCell align="right">{row.price}</TableCell>
                 <TableCell align="right">{row.guestCount}</TableCell>
                 <TableCell align="right">
+                    <Box component="form" onSubmit={handleEventSelect}>
+                        <input type="hidden" name="eventid" value={row.id} />
                     <Button
-                        onClick={handleGuestOpen}
+                        
                         type="submit"
                         variant="contained"
                         sx={{ mt: 0.1, mb: 0.1 }}
 
-                    >Lisa uus külastaja</Button>
+                        >Lisa uus külastaja</Button>
+                    </Box>
 
                 </TableCell>
 
@@ -190,9 +224,12 @@ export default function Events() {
     const [user, setUser] = useState();
 
     const [open, setOpen] = React.useState(false);
+    const [persons, setPersons] = useState([]);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -226,9 +263,20 @@ export default function Events() {
             })
     }
 
+    const retrievePersons = async () => {
+        await axios.get("https://localhost:44450/api/mpersons/persons")
+            .then((response) => {
+                console.log(response.data);
+                setPersons(response.data);
+
+            })
+    }
+
+
     useEffect(() => {
         setUser(localStorage.getItem("user"))
         retrieveEvents()
+        retrievePersons()
 
     }, []);
 
@@ -248,7 +296,7 @@ export default function Events() {
 
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                        Uue makseviisi lisamine
+                        Uue ürituse lisamine
                         <TextField id="eventname"
                             name="eventname"
                             label="ürituse nimi"
@@ -263,7 +311,6 @@ export default function Events() {
                             variant="outlined" />
 
                         <Button
-
                             type="submit"
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
