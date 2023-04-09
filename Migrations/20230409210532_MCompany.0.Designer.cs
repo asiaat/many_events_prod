@@ -3,6 +3,7 @@ using System;
 using ManyEvents.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,27 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManyEvents.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20230409210532_MCompany.0")]
+    partial class MCompany0
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.4");
-
-            modelBuilder.Entity("MCompanyMEvent", b =>
-                {
-                    b.Property<int>("EventsListId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MCompaniesId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("EventsListId", "MCompaniesId");
-
-                    b.HasIndex("MCompaniesId");
-
-                    b.ToTable("MCompanyMEvent");
-                });
 
             modelBuilder.Entity("MEventMPerson", b =>
                 {
@@ -45,40 +33,6 @@ namespace ManyEvents.Migrations
                     b.HasIndex("MPersonsId");
 
                     b.ToTable("MEventMPerson");
-                });
-
-            modelBuilder.Entity("ManyEvents.Models.MCompany", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("FeeTypeId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("GuestsCount")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("JurName")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("RegCode")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Remarks")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FeeTypeId");
-
-                    b.ToTable("MCompany");
                 });
 
             modelBuilder.Entity("ManyEvents.Models.MEvent", b =>
@@ -177,21 +131,6 @@ namespace ManyEvents.Migrations
                     b.ToTable("PersonalCode");
                 });
 
-            modelBuilder.Entity("MCompanyMEvent", b =>
-                {
-                    b.HasOne("ManyEvents.Models.MEvent", null)
-                        .WithMany()
-                        .HasForeignKey("EventsListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ManyEvents.Models.MCompany", null)
-                        .WithMany()
-                        .HasForeignKey("MCompaniesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("MEventMPerson", b =>
                 {
                     b.HasOne("ManyEvents.Models.MEvent", null)
@@ -205,17 +144,6 @@ namespace ManyEvents.Migrations
                         .HasForeignKey("MPersonsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ManyEvents.Models.MCompany", b =>
-                {
-                    b.HasOne("ManyEvents.Models.MFeeType", "FeeType")
-                        .WithMany()
-                        .HasForeignKey("FeeTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FeeType");
                 });
 
             modelBuilder.Entity("ManyEvents.Models.MEvent", b =>

@@ -16,10 +16,12 @@ namespace ManyEvents.Models
 
         public MEvent()
         {
-            MPersons = new HashSet<MPerson>();
+            MPersons    = new HashSet<MPerson>();
+            MCompanies = new HashSet<MCompany>();
         }
 
         public virtual ICollection<MPerson> MPersons { get; set; }
+        public virtual ICollection<MCompany> MCompanies{ get; set; }
 
         public void SetFeeType(MFeeType feeType)
         {

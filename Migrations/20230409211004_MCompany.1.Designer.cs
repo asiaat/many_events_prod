@@ -3,6 +3,7 @@ using System;
 using ManyEvents.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,27 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManyEvents.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20230409211004_MCompany.1")]
+    partial class MCompany1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.4");
-
-            modelBuilder.Entity("MCompanyMEvent", b =>
-                {
-                    b.Property<int>("EventsListId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MCompaniesId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("EventsListId", "MCompaniesId");
-
-                    b.HasIndex("MCompaniesId");
-
-                    b.ToTable("MCompanyMEvent");
-                });
 
             modelBuilder.Entity("MEventMPerson", b =>
                 {
@@ -90,6 +78,9 @@ namespace ManyEvents.Migrations
                     b.Property<int>("EventFeeTypeId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("MCompanyId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Place")
                         .HasColumnType("TEXT");
 
@@ -105,6 +96,8 @@ namespace ManyEvents.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EventFeeTypeId");
+
+                    b.HasIndex("MCompanyId");
 
                     b.ToTable("MEvent");
                 });
@@ -177,21 +170,6 @@ namespace ManyEvents.Migrations
                     b.ToTable("PersonalCode");
                 });
 
-            modelBuilder.Entity("MCompanyMEvent", b =>
-                {
-                    b.HasOne("ManyEvents.Models.MEvent", null)
-                        .WithMany()
-                        .HasForeignKey("EventsListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ManyEvents.Models.MCompany", null)
-                        .WithMany()
-                        .HasForeignKey("MCompaniesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("MEventMPerson", b =>
                 {
                     b.HasOne("ManyEvents.Models.MEvent", null)
@@ -226,6 +204,10 @@ namespace ManyEvents.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ManyEvents.Models.MCompany", null)
+                        .WithMany("EventsList")
+                        .HasForeignKey("MCompanyId");
+
                     b.Navigation("EventFeeType");
                 });
 
@@ -246,6 +228,11 @@ namespace ManyEvents.Migrations
                     b.Navigation("FeeType");
 
                     b.Navigation("PersonalCode");
+                });
+
+            modelBuilder.Entity("ManyEvents.Models.MCompany", b =>
+                {
+                    b.Navigation("EventsList");
                 });
 #pragma warning restore 612, 618
         }

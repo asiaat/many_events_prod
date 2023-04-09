@@ -19,5 +19,7 @@ namespace ManyEvents.Data
         public DbSet<ManyEvents.Models.MFeeType> MFeeType { get; set; } = default!;
 
         public DbSet<ManyEvents.Models.MPerson> MPerson { get; set; } = default!;
+
+        public DbSet<ManyEvents.Models.MCompany> MCompany { get; set; } = default!;
     }
 }

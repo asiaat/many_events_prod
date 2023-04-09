@@ -103,9 +103,6 @@ function Row(props: { row: ReturnType<typeof createData> }) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        //var guestId = data.get('guestid')
-
-
 
         var updatedPerson = {
             id: parseInt(data.get('guestid')),
@@ -115,15 +112,6 @@ function Row(props: { row: ReturnType<typeof createData> }) {
         }
         console.log(updatedPerson);
 
-        /*
-        var updatePerson = {
-            id: 9,
-            firstName: "Eigas",
-            lastName: "Midagist",
-            personalCodeAsString: "4564566"
-
-        }
-        */
 
         
         await axios.put("https://localhost:44450/api/mpersons/update",
