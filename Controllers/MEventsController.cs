@@ -164,6 +164,7 @@ namespace ManyEvents.Controllers
                 person.EventsList
                     .Add(foundEvent);
 
+                // TODO try catch?
                 _context.SaveChanges();
             }
 

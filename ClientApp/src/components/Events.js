@@ -126,16 +126,15 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                     </Typography>
                     <Box sx={{ minWidth: 120 }}>
                         <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                            <InputLabel id="demo-simple-select-label">Isik</InputLabel>
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 value={age}
-                                label="Age"
+                                label="Isik"
                                 onChange={handleChange}
                             >
-                                
-
+ 
                                 {persons.map((person) => (
                                     <MenuItem value={person.id}>                                    
                                         {person.firstName}  {person.lastName}  {person.personalCodeAsString}    
@@ -147,13 +146,13 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                     </Box>
 
                     <Box component="form" onSubmit={handleGuestSubmit} noValidate sx={{ mt: 1 }}>
-                        Külastaja      
+                      
 
                         <Button
 
                             type="submit"
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={{ mt: 6, mb: 7 }}
 
                         >Salvesta</Button>
                     </Box>

@@ -38,9 +38,11 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     const [open, setOpen] = React.useState(false);
     const [openGuest, setOpenGuest] = React.useState(false);
     const [openDelGuest, setOpenDelGuest] = React.useState(false);
+    const [openUpdateGuest, setOpenUpdateGuest] = React.useState(false);
 
     const [user, setUser] = useState();
     const [personId, setPersonId] = useState();
+    const [person, setPerson] = useState([]);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -48,6 +50,9 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     const handleGuestClose = () => setOpenGuest(false);
     const handleDelGuestOpen = () => setOpenDelGuest(true);
     const handleDelGuestClose = () => setOpenDelGuest(false);
+
+    const handleUpdateGuestOpen = () => setOpenUpdateGuest(true);
+    const handleUpdateGuestClose = () => setOpenUpdateGuest(false);
 
 
     const handleGuestSubmit = async (event) => {
@@ -72,6 +77,115 @@ function Row(props: { row: ReturnType<typeof createData> }) {
         handleDelGuestOpen()
 
     };
+
+    const handleGuestUpdateDialog = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+
+        var guestId = data.get('guestid')
+
+        var updatePerson = {
+            id: data.get('guestid'),
+            firstName: data.get('gfirstname'),
+            lastName: data.get('glastname'),
+            personalCode: data.get('gpersonalcode'),
+        }
+        setPerson(updatePerson);
+
+        console.log(updatePerson);
+       
+        handleUpdateGuestOpen()
+
+    };
+
+    const handleGuestSave = async (event) => {
+       
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+
+        //var guestId = data.get('guestid')
+
+
+
+        var updatedPerson = {
+            id: parseInt(data.get('guestid')),
+            firstName: data.get('firstName'),
+            lastName: data.get('lastName'),
+            personalCodeAsString: data.get('personalCodeAsString'),
+        }
+        console.log(updatedPerson);
+
+        /*
+        var updatePerson = {
+            id: 9,
+            firstName: "Eigas",
+            lastName: "Midagist",
+            personalCodeAsString: "4564566"
+
+        }
+        */
+
+        
+        await axios.put("https://localhost:44450/api/mpersons/update",
+            updatedPerson)
+            .then((response) => {
+                console.log(response.data);
+                handleUpdateGuestClose()
+            })
+        
+
+    };
+
+
+    const renderUpdateModal = () => {
+        return (
+            <Modal
+                open={openUpdateGuest}
+                onClose={handleUpdateGuestClose}
+                aria-labelledby="modal-update-title"
+                aria-describedby="modal-update-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-update-title" variant="h6" component="h2">
+                       Isiku andmete muutmine
+                    </Typography>
+                    <Typography id="modal-update-description" sx={{ mt: 2 }}>
+
+                    </Typography>
+                    <Box component="form" onSubmit={handleGuestSave} noValidate sx={{ mt: 1 }}>
+
+                        <input type="hidden" name="guestid" value={person.id} />
+                        <TextField id="firstName"
+                            name="firstName"
+                            label="eesnimi"
+                            defaultValue={person.firstName}
+                            variant="outlined" />
+                        <TextField id="lastName"
+                            name="lastName"
+                            label="perekonnanimi"
+                            defaultValue={person.lastName}
+                            variant="outlined" />
+                        <TextField id="personalCodeAsString"
+                            name="personalCodeAsString"
+                            label="isikukood"
+                            defaultValue={person.personalCode}
+                            variant="outlined" />
+
+                        <Button
+
+                            type="submit"
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+
+                        >Salvesta</Button>
+                    </Box>
+                </Box>
+            </Modal>
+        );
+    }
+
+
+
 
     const renderGuestModal = () => {
         return (
@@ -161,6 +275,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
         <React.Fragment>
             {renderGuestModal()}
             {renderDelModal()}
+            {renderUpdateModal()}
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <IconButton
@@ -177,18 +292,32 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                 <TableCell align="right">{row.lastName}</TableCell>
                 <TableCell align="right">{row.personalCodeAsString}</TableCell>
                 <TableCell align="right" >
-                    <Box component="form" onSubmit={handleGuestDeleteDialog}>
+                    <Box component="form" onSubmit={handleGuestUpdateDialog}>
                         <input type="hidden" name="guestid" value={row.id} />
+                        <input type="hidden" name="gfirstname" value={row.firstName} />
+                        <input type="hidden" name="glastname" value={row.lastName} />
+                        <input type="hidden" name="gpersonalcode" value={row.personalCodeAsString} />
                         <Button
                         
                             type="submit"
                             variant="contained"
                             sx={{ mt: .12, mb: .12 }}
 
-                            >eemalda</Button>
+                            >muuda</Button>
                      </Box>
                 </TableCell>
-                
+                <TableCell align="right" >
+                    <Box component="form" onSubmit={handleGuestDeleteDialog}>
+                        <input type="hidden" name="guestid" value={row.id} />
+                        <Button
+
+                            type="submit"
+                            variant="contained"
+                            sx={{ mt: .12, mb: .12 }}
+
+                        >eemalda</Button>
+                    </Box>
+                </TableCell>
                 
                 
 
@@ -244,10 +373,7 @@ export default function Persons() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-
-        
-      
+        const data = new FormData(event.currentTarget);   
 
         const newPerson = {
 
