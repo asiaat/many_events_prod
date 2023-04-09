@@ -4,6 +4,7 @@ import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
 import Login from "./components/Login/Login";
 import Event from "./components/Events";
+import Persons from "./components/Persons";
 
 const AppRoutes = [
   {
@@ -29,6 +30,10 @@ const AppRoutes = [
     {
         path: '/events',
         element: <Event />
+    },
+    {
+        path: '/guests',
+        element: <Persons />
     },
 
 ];

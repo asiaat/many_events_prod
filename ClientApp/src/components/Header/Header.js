@@ -42,7 +42,7 @@ export default function Header() {
                                 <a href="/events">Üritused</a>
                             </li>
                             <li className="border-b border-gray-400 my-8 uppercase">
-                                <a href="/portfolio">Portfolio</a>
+                                <a href="/guests">Osavõtjad</a>
                             </li>
                             
                             <li className="border-b border-gray-400 my-8 uppercase">
@@ -61,7 +61,7 @@ export default function Header() {
                         <a href="/events">Üritused</a>
                     </li>
                     <li>
-                        <a href="/portfolio">Portfolio</a>
+                        <a href="/guests">Osavõtjad</a>
                     </li>
                     
                     <li>
