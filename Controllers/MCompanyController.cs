@@ -9,6 +9,7 @@ using ManyEvents.Data;
 using ManyEvents.Models;
 using Serilog;
 using ManyEvents.API.Dto;
+using ManyEvents.Migrations;
 
 namespace ManyEvents.Controllers
 {
@@ -37,7 +38,7 @@ namespace ManyEvents.Controllers
         public IEnumerable<MCompanyDto> GetCompanies()
         {
 
-            Log.Information("MPersonController::GetMPersons ");
+            Log.Information("MCompanyController::GetCompanies ");
 
             //var evenList = 
             var list = _context.MCompany
@@ -89,10 +90,75 @@ namespace ManyEvents.Controllers
             return View(mCompany);
         }
 
-        // GET: MCompany/Create
-        public IActionResult Create()
+        [HttpPost]
+        [Route("create")]
+        public string CreateNewCompany(MCompanyDto company)
         {
-            return View();
+            Log.Information("MPersonController::        public string CreateNewCompany(MCompanyDto company)\r\n " +
+                company.JurName + " " + company.RegCode);
+
+            var newComp = new MCompany();
+
+            newComp.SetJurName(company.JurName);
+            newComp.SetReqCode(company.RegCode);
+            newComp.SetGuestsCount(company.GuestsCount);
+            
+
+            var feeType = _context.MFeeType
+                .FirstOrDefault();
+
+            newComp.SetFeeType(feeType);
+
+            _context.Add(newComp);
+            _context.SaveChanges();
+
+            return "OK";
+
+        }
+
+        [HttpPut]
+        [Route("update")]
+        public MCompanyDto UpdateCompany(MCompanyDto company)
+        {
+            var foundCompany = _context.MCompany
+                .Where(p => p.Id == company.Id)
+                .FirstOrDefault();
+
+            if (foundCompany is null)
+            {
+                string msg = "Cant found the Company with id: " +
+                    company.Id.ToString();
+
+                Log.Error(msg);
+
+                throw new Exception(msg);
+            }
+
+            if (foundCompany.JurName is not null)
+            {
+                foundCompany.SetJurName(company.JurName);
+            }
+
+            if (foundCompany.RegCode is not null)
+            {
+                foundCompany.SetReqCode(company.RegCode);
+            }
+            if (foundCompany.GuestsCount.ToString() != null)
+            {
+                foundCompany.SetGuestsCount(company.GuestsCount);
+            }
+
+            _context.SaveChanges();
+
+            return new MCompanyDto
+            {
+
+                Id = foundCompany.Id,
+                JurName = foundCompany.JurName,
+                RegCode = foundCompany.RegCode,
+                GuestsCount = foundCompany.GuestsCount
+
+            };
         }
 
         // POST: MCompany/Create
@@ -181,9 +247,9 @@ namespace ManyEvents.Controllers
         }
 
         // POST: MCompany/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpDelete]
+        [Route("delete/{id:int}")]
+        public async Task<IActionResult> DeleteCompany(int id)
         {
             if (_context.MCompany == null)
             {
@@ -193,10 +259,19 @@ namespace ManyEvents.Controllers
             if (mCompany != null)
             {
                 _context.MCompany.Remove(mCompany);
+                await _context.SaveChangesAsync();
+
+                Log.Information("MCompanyController::Delete (" +
+                mCompany.JurName + " , " + mCompany.RegCode + ") was deleted");
+
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
             }
             
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            
         }
 
         private bool MCompanyExists(int id)

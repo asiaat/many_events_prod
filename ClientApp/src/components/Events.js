@@ -51,6 +51,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     const [eventId, setEventId] = useState();
 
     const [persons, setPersons] = useState([]);
+    const [companies, setCompanies] = useState([]);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -98,6 +99,15 @@ function Row(props: { row: ReturnType<typeof createData> }) {
             .then((response) => {
                 console.log(response.data);
                 setPersons(response.data);
+
+            })
+    }
+
+    const retrieveCompanies = async () => {
+        await axios.get("https://localhost:44450/api/mcompanies/companies")
+            .then((response) => {
+                console.log(response.data);
+                setCompanies(response.data);
 
             })
     }
@@ -222,6 +232,34 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                                             </TableCell>
                                             <TableCell>{historyRow.lastName}</TableCell>
                                             <TableCell align="right">{historyRow.personalCodeAsString}</TableCell>
+
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </Box>
+
+                        <Box sx={{ margin: 1 }}>
+                            <Typography variant="h6" gutterBottom component="div">
+                                Firmad
+              </Typography>
+                            <Table size="small" aria-label="purchases">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Juriidiline nimi</TableCell>
+                                        <TableCell>Registrikood</TableCell>
+                                        <TableCell > Külastajaid</TableCell>
+
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {row.companiesList.map((comp) => (
+                                        <TableRow key={comp.id}>
+                                            <TableCell component="th" scope="row">
+                                                {comp.jurName}
+                                            </TableCell>
+                                            <TableCell>{comp.regCode}</TableCell>
+                                            <TableCell>{comp.guestsCount}</TableCell>
 
                                         </TableRow>
                                     ))}

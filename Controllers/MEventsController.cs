@@ -42,7 +42,7 @@ namespace ManyEvents.Controllers
                         Name = e.EventFeeType.Name,
                         Remarks = e.EventFeeType.Remarks
                     },
-                    GuestCount = e.MPersons.Count(),
+                    
 
                     PersonsList = e.MPersons.Select(
                         p => new MPersonDto
@@ -52,6 +52,22 @@ namespace ManyEvents.Controllers
                             LastName = p.LastName,
                             PersonalCodeAsString = p.PersonalCode.Code,
                         }).ToList(),
+
+                    CompaniesList = e.MCompanies.Select(
+                        c => new MCompanyDto
+                        {
+                            Id = c.Id,
+                            JurName = c.JurName,
+                            RegCode = c.RegCode,
+                            GuestsCount = c.GuestsCount
+                        }
+                        ).ToList(),
+
+                  
+                    GuestCount = e.MCompanies.Select(c => c.GuestsCount).Sum()+
+                        e.MPersons.Count()
+
+
 
                 }).ToList();
 
@@ -93,7 +109,7 @@ namespace ManyEvents.Controllers
         
         [HttpPost]
         [Route("create")]
-        public string CreateNewPerson(MEventDto mevent)
+        public string CreateNewEvent(MEventDto mevent)
         {
             Log.Information("MPersonController::CreateNewPerson " +
                 mevent.Title + " " + mevent.Place);
@@ -169,6 +185,33 @@ namespace ManyEvents.Controllers
             }
 
 
+
+            return "OK";
+
+        }
+
+        [HttpGet]
+        [Route("addcompany/{eventId:int}/{companyId:int}")]
+        public string AddCompany(int eventid, int companyId)
+        {
+
+            var foundEvent = _context.MEvent
+                .Where(e => e.Id == eventid)
+                .FirstOrDefault();
+
+            var company = _context.MCompany
+                .Where(p => p.Id == companyId)
+                .FirstOrDefault();
+
+            if (foundEvent is not null && company is not null)
+            {
+
+                company.EventsList
+                    .Add(foundEvent);
+
+                // TODO try catch?
+                _context.SaveChanges();
+            }
 
             return "OK";
 

@@ -20,6 +20,24 @@ namespace ManyEvents.Models
             Remarks = "";
             EventsList = new HashSet<MEvent>();
         }
+
+        public void SetJurName(string jurName)
+        {
+            JurName = jurName;
+        }
+        public void SetReqCode(string reqCode)
+        {
+            RegCode = reqCode;
+        }
+
+        public void SetGuestsCount(int guestsCount)
+        {
+            GuestsCount = guestsCount;
+        }
+        public void SetFeeType(MFeeType feeType)
+        {
+            FeeType = feeType;
+        }
     }
 }
 

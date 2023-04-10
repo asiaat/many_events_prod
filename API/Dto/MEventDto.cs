@@ -15,6 +15,7 @@ namespace ManyEvents.API.Dto
         public int? GuestCount { get; set; }
 
         public virtual IList<MPersonDto>? PersonsList { get; set; }
+        public virtual IList<MCompanyDto>? CompaniesList { get; set; }
     }
 }
 
