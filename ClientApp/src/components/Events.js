@@ -50,6 +50,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     const [open, setOpen] = React.useState(false);
     const [openGuest, setOpenGuest] = React.useState(false);
     const [age, setAge] = React.useState('');
+    const [companyId, setCompanyId] = React.useState('');
 
     const [user, setUser] = useState();
     const [guest, setGuest] = useState();
@@ -88,9 +89,34 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 
     };
 
+    const handleCompanySubmit = async (event) => {
+        event.preventDefault();
+
+
+        console.log("eventId: " + eventId + " , companyId:" + companyId)
+
+
+        await axios.get("https://localhost:44450/api/mevents/addcompany/" + eventId + "/" + companyId)
+            .then((response) => {
+                console.log(response.data);
+
+            })
+
+
+        handleGuestClose()
+
+    };
+
     const handleChange = (event: SelectChangeEvent) => {
         setAge(event.target.value);
         console.log("age: " + age);
+    };
+
+    
+
+    const handleCompanyChange = (event: SelectChangeEvent) => {
+        setCompanyId(event.target.value);
+        console.log("companyId: " + companyId);
     };
 
     const handleEventSelect = (event) => {
@@ -128,6 +154,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     useEffect(() => {
         
         retrievePersons()
+        retrieveCompanies()
 
     }, []);
     
@@ -153,22 +180,22 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 
                                 </TabList>
                             </Box>
-                        <TabPanel value="1">Eraisik
+                        <TabPanel value="1">
 
                          <Typography id="modal-guest-title" variant="h6" component="h2">
-                                Uus Külastaja
+                                Lisa uus eraisikust külastaja
                     </Typography>
                             <Typography id="modal-guest-description" sx={{ mt: 2 }}>
 
                             </Typography>
                             <Box sx={{ minWidth: 120 }}>
                                 <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-label">Isik</InputLabel>
+                                    <InputLabel id="demo-simple-select-label">Eraisik</InputLabel>
                                     <Select
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
                                         value={age}
-                                        label="Isik"
+                                        label="Eraisik"
                                         onChange={handleChange}
                                     >
 
@@ -195,7 +222,50 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                             </Box>
 
                         </TabPanel>
-                            <TabPanel value="2">Item Two</TabPanel>
+                        <TabPanel value="2">
+                            
+                            
+                         <Typography id="modal-guest-title" variant="h6" component="h2">
+                                Lisa uus külastaja ettevõtte näol
+                    </Typography>
+                            <Typography id="modal-guest-description" sx={{ mt: 2 }}>
+
+                            </Typography>
+                            <Box sx={{ minWidth: 120 }}>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">Ettevõte</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={companyId}
+                                        label="Ettevõte"
+                                        onChange={handleCompanyChange}
+                                    >
+
+                                        {companies.map((company) => (
+                                            <MenuItem value={company.id}>
+                                                {company.jurName} {company.regCode} 
+                                            </MenuItem>
+                                        ))}
+
+                                    </Select>
+                                </FormControl>
+                            </Box>
+
+                            <Box component="form" onSubmit={handleCompanySubmit} noValidate sx={{ mt: 1 }}>
+
+
+                                <Button
+
+                                    type="submit"
+                                    variant="contained"
+                                    sx={{ mt: 6, mb: 7 }}
+
+                                >Salvesta</Button>
+                            </Box>
+
+
+                        </TabPanel>
 
                         </TabContext>
 
