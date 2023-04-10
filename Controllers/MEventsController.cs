@@ -63,7 +63,7 @@ namespace ManyEvents.Controllers
                         }
                         ).ToList(),
 
-                    //GuestCount = e.MPersons.Count()
+                  
                     GuestCount = e.MCompanies.Select(c => c.GuestsCount).Sum()+
                         e.MPersons.Count()
 
@@ -185,6 +185,33 @@ namespace ManyEvents.Controllers
             }
 
 
+
+            return "OK";
+
+        }
+
+        [HttpGet]
+        [Route("addcompany/{eventId:int}/{companyId:int}")]
+        public string AddCompany(int eventid, int companyId)
+        {
+
+            var foundEvent = _context.MEvent
+                .Where(e => e.Id == eventid)
+                .FirstOrDefault();
+
+            var company = _context.MCompany
+                .Where(p => p.Id == companyId)
+                .FirstOrDefault();
+
+            if (foundEvent is not null && company is not null)
+            {
+
+                company.EventsList
+                    .Add(foundEvent);
+
+                // TODO try catch?
+                _context.SaveChanges();
+            }
 
             return "OK";
 

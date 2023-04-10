@@ -8,6 +8,7 @@ const context = [
     "/api/mevents",
     "/api/mevents/create",
     "/api/mevents/bind",
+    "/api/mevents/addcompany",
     "/api/mfeetypes/feetypes",
     "/api/mfeetypes/new",
     "/api/mfeetypes/update",
