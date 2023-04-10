@@ -10,6 +10,9 @@ using ManyEvents.Models;
 using ManyEvents.API.Dto;
 using Serilog;
 using ManyEvents.Migrations;
+using System.Net;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.CodeAnalysis;
 
 namespace ManyEvents.Controllers
 {
@@ -123,6 +126,9 @@ namespace ManyEvents.Controllers
                 Log.Error(msg);
 
                 throw new Exception(msg);
+
+
+                //yield return new MPersonDto();
             }
 
             if (foundPerson.FirstName is not null)

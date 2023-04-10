@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using ManyEvents.Migrations;
+using Serilog;
 
 namespace ManyEvents.Models
 {
@@ -34,7 +35,15 @@ namespace ManyEvents.Models
 
         public void SetPersonalCode(string personalCodeAsString)
         {
-            PersonalCode = new PersonalCode(personalCodeAsString);
+            try
+            {
+                PersonalCode = new PersonalCode(personalCodeAsString);
+            }
+            catch
+            {
+                Log.Error("Possble wrong PersonalCode: " + personalCodeAsString); 
+            }
+            
         }
         public void SetFeeType(MFeeType feeType)
         {
