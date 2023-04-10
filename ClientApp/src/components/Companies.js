@@ -366,15 +366,16 @@ export default function Companies() {
         
         const newCompany = {
 
-            JurName: "Skype",
-            RegCode: "546435677",
-            GuestsCount: 5,
+            JurName: data.get('jurName'),
+            RegCode: data.get('regCode'),
+            GuestsCount: parseInt(data.get('guestsCount')),
             Remarks: "midagi"
 
         }
 
         console.log(newCompany)
 
+        
         await axios.post("https://localhost:44450/api/mcompanies/create",
             newCompany)
             .then((response) => {
@@ -433,13 +434,13 @@ export default function Companies() {
                             name="jurName"
                             label="Juriidiline nimi"
                             variant="outlined" />
-                        <TextField id="reqCode"
-                            name="reqCode"
+                        <TextField id="regCode"
+                            name="regCode"
                             label="Registrikood"
                             variant="outlined" />
-                        <TextField id="personalCodeAsString"
-                            name="personalCodeAsString"
-                            label="isikukood"
+                        <TextField id="guestsCount"
+                            name="guestsCount"
+                            label="Osavõtjate arv"
                             variant="outlined" />
 
                         <Button

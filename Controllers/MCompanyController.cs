@@ -100,7 +100,7 @@ namespace ManyEvents.Controllers
 
             newComp.SetJurName(company.JurName);
             newComp.SetReqCode(company.RegCode);
-            newComp.SetGuestsCount(10);
+            newComp.SetGuestsCount(company.GuestsCount);
             
 
             var feeType = _context.MFeeType
