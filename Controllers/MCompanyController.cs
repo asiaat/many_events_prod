@@ -9,6 +9,7 @@ using ManyEvents.Data;
 using ManyEvents.Models;
 using Serilog;
 using ManyEvents.API.Dto;
+using ManyEvents.Migrations;
 
 namespace ManyEvents.Controllers
 {
@@ -201,9 +202,9 @@ namespace ManyEvents.Controllers
         }
 
         // POST: MCompany/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpDelete]
+        [Route("delete/{id:int}")]
+        public async Task<IActionResult> DeleteCompany(int id)
         {
             if (_context.MCompany == null)
             {
@@ -213,10 +214,19 @@ namespace ManyEvents.Controllers
             if (mCompany != null)
             {
                 _context.MCompany.Remove(mCompany);
+                await _context.SaveChangesAsync();
+
+                Log.Information("MCompanyController::Delete (" +
+                mCompany.JurName + " , " + mCompany.RegCode + ") was deleted");
+
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
             }
             
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            
         }
 
         private bool MCompanyExists(int id)

@@ -17,8 +17,8 @@ const context = [
     "/api/mpersons/update",
     "/api/mpersons/delete",
     "/api/mcompanies/companies",
-    "/api/mcompanies/create"
-    
+    "/api/mcompanies/create",
+    "/api/mcompanies/delete"   
 ];
 
 const onError = (err, req, resp, target) => {
