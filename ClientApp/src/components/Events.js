@@ -248,7 +248,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                                     <TableRow>
                                         <TableCell>Juriidiline nimi</TableCell>
                                         <TableCell>Registrikood</TableCell>
-                                        <TableCell align="right">Isikukood</TableCell>
+                                        <TableCell > Külastajaid</TableCell>
 
                                     </TableRow>
                                 </TableHead>
@@ -259,7 +259,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                                                 {comp.jurName}
                                             </TableCell>
                                             <TableCell>{comp.regCode}</TableCell>
-                                           
+                                            <TableCell>{comp.guestsCount}</TableCell>
 
                                         </TableRow>
                                     ))}
