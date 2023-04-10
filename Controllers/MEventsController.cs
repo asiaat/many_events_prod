@@ -42,7 +42,7 @@ namespace ManyEvents.Controllers
                         Name = e.EventFeeType.Name,
                         Remarks = e.EventFeeType.Remarks
                     },
-                    GuestCount = e.MPersons.Count(),
+                    
 
                     PersonsList = e.MPersons.Select(
                         p => new MPersonDto
@@ -52,6 +52,22 @@ namespace ManyEvents.Controllers
                             LastName = p.LastName,
                             PersonalCodeAsString = p.PersonalCode.Code,
                         }).ToList(),
+
+                    CompaniesList = e.MCompanies.Select(
+                        c => new MCompanyDto
+                        {
+                            Id = c.Id,
+                            JurName = c.JurName,
+                            RegCode = c.RegCode,
+                            GuestsCount = c.GuestsCount
+                        }
+                        ).ToList(),
+
+                    //GuestCount = e.MPersons.Count()
+                    GuestCount = e.MCompanies.Select(c => c.GuestsCount).Sum()+
+                        e.MPersons.Count()
+
+
 
                 }).ToList();
 
@@ -93,7 +109,7 @@ namespace ManyEvents.Controllers
         
         [HttpPost]
         [Route("create")]
-        public string CreateNewPerson(MEventDto mevent)
+        public string CreateNewEvent(MEventDto mevent)
         {
             Log.Information("MPersonController::CreateNewPerson " +
                 mevent.Title + " " + mevent.Place);
