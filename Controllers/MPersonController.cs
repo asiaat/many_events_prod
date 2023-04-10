@@ -29,13 +29,12 @@ namespace ManyEvents.Controllers
 
         [HttpGet]
         [Route("persons")]
-        public IEnumerable<MPersonDto> GetMPersons()
+        public async Task<IActionResult> GetMPersons()
         {
 
-            Log.Information("MPersonController::GetMPersons ");
+            //Log.Information("MPersonController::GetMPersons ");
 
-            //var evenList = 
-            var list = _context.MPerson
+            var list = await _context.MPerson
                 .Select(f => new MPersonDto
                 {
                     Id = f.Id,
@@ -59,36 +58,16 @@ namespace ManyEvents.Controllers
 
                         }).ToList()
 
-                }).ToList();
+                }).ToListAsync();
 
-            return list;
+            return Ok(list);
         }
-
-        // GET: MPerson/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.MPerson == null)
-            {
-                return NotFound();
-            }
-
-            var mPerson = await _context.MPerson
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (mPerson == null)
-            {
-                return NotFound();
-            }
-
-            return View(mPerson);
-        }
-
-        
 
 
         // POST: MFeeTypes/Create
         [HttpPost]
         [Route("create")]
-        public string CreateNewPerson(MPersonDto person)
+        public async Task<IActionResult> CreateNewPerson(MPersonDto person)
         {
             Log.Information("MPersonController::CreateNewPerson " +
                 person.FirstName + " " +person.LastName);
@@ -103,16 +82,26 @@ namespace ManyEvents.Controllers
 
             newPerson.SetFeeType(feeType);
 
-            _context.Add(newPerson);
-            _context.SaveChanges();
+            try
+            {
+                _context.Add(newPerson);
+                await _context.SaveChangesAsync();
 
-            return "OK";
+                return Ok(newPerson);
+            }
+            catch
+            {
+                return StatusCode(500, "Internal Server error");
+            }
+            
+
+            
             
         }
 
         [HttpPut]
         [Route("update")]
-        public MPersonDto UpdatePerson(MPersonDto person)
+        public async Task<IActionResult>  UpdatePerson(MPersonDto person)
         {
             var foundPerson = _context.MPerson
                 .Where(p => p.Id == person.Id)
@@ -125,10 +114,7 @@ namespace ManyEvents.Controllers
 
                 Log.Error(msg);
 
-                throw new Exception(msg);
-
-
-                //yield return new MPersonDto();
+                return StatusCode(402, "Person not found");
             }
 
             if (foundPerson.FirstName is not null)
@@ -141,31 +127,13 @@ namespace ManyEvents.Controllers
                 foundPerson.SetLastName(person.LastName);
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return new MPersonDto
-            {
-                
-                FirstName = person.FirstName,
-                LastName = person.LastName,
-            };
+
+            return Ok(foundPerson);
         }
 
-        // GET: MPerson/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.MPerson == null)
-            {
-                return NotFound();
-            }
-
-            var mPerson = await _context.MPerson.FindAsync(id);
-            if (mPerson == null)
-            {
-                return NotFound();
-            }
-            return View(mPerson);
-        }
+        
 
         [HttpDelete]
         [Route("delete/{id:int}")]
@@ -192,12 +160,8 @@ namespace ManyEvents.Controllers
             }
 
 
-
         }
 
-        private bool MPersonExists(int id)
-        {
-          return (_context.MPerson?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+        
     }
 }

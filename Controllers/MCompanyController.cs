@@ -24,24 +24,15 @@ namespace ManyEvents.Controllers
             _context = context;
         }
 
-        // GET: MCompany
-        public async Task<IActionResult> Index()
-        {
-              return _context.MCompany != null ? 
-                          View(await _context.MCompany.ToListAsync()) :
-                          Problem("Entity set 'DBContext.MCompany'  is null.");
-        }
-
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("companies")]
-        public IEnumerable<MCompanyDto> GetCompanies()
+        public async Task<IActionResult> GetCompanies()
         {
-
-            Log.Information("MCompanyController::GetCompanies ");
-
-            //var evenList = 
-            var list = _context.MCompany
+ 
+            var list = await _context.MCompany
                 .Select(f => new MCompanyDto
                 {
                     Id = f.Id,
@@ -67,34 +58,18 @@ namespace ManyEvents.Controllers
 
                         }).ToList()
 
-                }).ToList();
+                }).ToListAsync();
 
-            return list;
+            return Ok(list);
         }
 
-        // GET: MCompany/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.MCompany == null)
-            {
-                return NotFound();
-            }
-
-            var mCompany = await _context.MCompany
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (mCompany == null)
-            {
-                return NotFound();
-            }
-
-            return View(mCompany);
-        }
+        
 
         [HttpPost]
         [Route("create")]
-        public string CreateNewCompany(MCompanyDto company)
+        public async Task<IActionResult> CreateNewCompany(MCompanyDto company)
         {
-            Log.Information("MPersonController::        public string CreateNewCompany(MCompanyDto company)\r\n " +
+            Log.Information("MPersonController::CreateNewCompany " +
                 company.JurName + " " + company.RegCode);
 
             var newComp = new MCompany();
@@ -110,15 +85,15 @@ namespace ManyEvents.Controllers
             newComp.SetFeeType(feeType);
 
             _context.Add(newComp);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return "OK";
+            return Ok(newComp);
 
         }
 
         [HttpPut]
         [Route("update")]
-        public MCompanyDto UpdateCompany(MCompanyDto company)
+        public async Task<IActionResult> UpdateCompany(MCompanyDto company)
         {
             var foundCompany = _context.MCompany
                 .Where(p => p.Id == company.Id)
@@ -131,7 +106,7 @@ namespace ManyEvents.Controllers
 
                 Log.Error(msg);
 
-                throw new Exception(msg);
+                return StatusCode(402, "Company was not found");
             }
 
             if (foundCompany.JurName is not null)
@@ -148,86 +123,16 @@ namespace ManyEvents.Controllers
                 foundCompany.SetGuestsCount(company.GuestsCount);
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return new MCompanyDto
-            {
-
-                Id = foundCompany.Id,
-                JurName = foundCompany.JurName,
-                RegCode = foundCompany.RegCode,
-                GuestsCount = foundCompany.GuestsCount
-
-            };
+            return Ok(foundCompany);
         }
 
-        // POST: MCompany/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("JurName,RegCode,GuestsCount,Remarks,Id")] MCompany mCompany)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(mCompany);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(mCompany);
-        }
+        
 
-        // GET: MCompany/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.MCompany == null)
-            {
-                return NotFound();
-            }
+        
 
-            var mCompany = await _context.MCompany.FindAsync(id);
-            if (mCompany == null)
-            {
-                return NotFound();
-            }
-            return View(mCompany);
-        }
-
-        // POST: MCompany/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("JurName,RegCode,GuestsCount,Remarks,Id")] MCompany mCompany)
-        {
-            if (id != mCompany.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(mCompany);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MCompanyExists(mCompany.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(mCompany);
-        }
-
+        
         // GET: MCompany/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -274,9 +179,5 @@ namespace ManyEvents.Controllers
             
         }
 
-        private bool MCompanyExists(int id)
-        {
-          return (_context.MCompany?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
     }
 }
