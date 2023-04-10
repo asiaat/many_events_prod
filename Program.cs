@@ -13,6 +13,8 @@ builder.Services.AddDbContext<DBContext>(options =>
 
 builder.Services.AddControllersWithViews();
 
+
+
 var app = builder.Build();
 
 Log.Logger = new LoggerConfiguration()
@@ -33,6 +35,22 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+if (args.Contains("/seed"))
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        var context = services.GetRequiredService<DBContext>();
+
+        var seeder = new Seeder(context);
+        seeder.SeedFeeTypes();
+        seeder.SeedPersons();
+
+        //seeder.SeedEvents();
+        // Call other seed methods here
+    }
+}
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
@@ -45,4 +63,5 @@ app.MapControllerRoute(
 app.MapFallbackToFile("index.html");
 
 app.Run();
+
 
