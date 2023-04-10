@@ -81,6 +81,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
         await axios.get("https://localhost:44450/api/mevents/addguest/" + eventId + "/" +age)
             .then((response) => {
                 console.log(response.data);
+                handleGuestClose()
 
             })
         
@@ -99,6 +100,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
         await axios.get("https://localhost:44450/api/mevents/addcompany/" + eventId + "/" + companyId)
             .then((response) => {
                 console.log(response.data);
+                handleGuestClose()
 
             })
 
@@ -487,28 +489,20 @@ export default function Events() {
 
 
 
-    const renderReturn = () => {
-
-        if (user) {
-
-            return (
-                <h1>
-
-                    <Button
-                        onClick={handleOpen}
-                        type="submit"
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-
-                    >Lisa uus üritus</Button>
-                </h1>
-            );
-        }
-    }
+    
 
     return (
         <div>
-            {renderReturn()}
+            <h1>
+
+                <Button
+                    onClick={handleOpen}
+                    type="submit"
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+
+                >Lisa uus üritus</Button>
+            </h1>
             {renderModal()}
 
 

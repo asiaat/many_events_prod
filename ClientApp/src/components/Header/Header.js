@@ -5,8 +5,8 @@ export default function Header() {
 
     return (
         <div className="flex items-center justify-between border-b border-gray-400 py-8">
-            <a href="/">
-                <img src="https://designbygio.it/images/logo.png" alt="logo" />
+            <a className="flex text-blue-600 font-bold px-1 py-1" href="/">
+                Külaliste Registreerimissüsteem
             </a>
             <nav>
                 <section className="MOBILE-MENU flex lg:hidden">
@@ -38,8 +38,9 @@ export default function Header() {
                             </svg>
                         </div>
                         <ul className="flex flex-col items-center justify-between min-h-[250px]">
+
                             <li className="border-b border-gray-400 my-8 uppercase">
-                                <a href="/events">Üritused</a>
+                                <a href="/">Üritused</a>
                             </li>
                             <li className="border-b border-gray-400 my-8 uppercase">
                                 <a href="/guests">Osavõtjad</a>
@@ -51,18 +52,18 @@ export default function Header() {
                             <li className="border-b border-gray-400 my-8 uppercase">
                                 <a href="/feetypes">Maksevõimalused</a>
                             </li>
-                            <li className="border-b border-gray-400 my-8 uppercase">
-                                <a href="/login">Login</a>
-                            </li>
+                            
                             
                         </ul>
                     </div>
                 </section>
 
                 <ul className="DESKTOP-MENU hidden space-x-8 lg:flex">
+
                     <li>
-                        <a href="/events">Üritused</a>
+                        <a href="/">Üritused</a>
                     </li>
+                   
                     <li>
                         <a href="/visitors">Külastajad</a>
                     </li>
@@ -71,9 +72,7 @@ export default function Header() {
                     <li>
                         <a href="/feetypes">Maksevõimalused</a>
                     </li>
-                    <li>
-                        <a href="/login">Login</a>
-                    </li>
+                    
                     
                 </ul>
             </nav>

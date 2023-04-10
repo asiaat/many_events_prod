@@ -269,8 +269,6 @@ export default function FeeTypes() {
 
     const renderFeeTypesTable = (ftypes) => {
 
-        if (user) {
-
             return (
                 <div>
                     <Button
@@ -337,15 +335,7 @@ export default function FeeTypes() {
                     </table>
                 </div>
             )
-        } else {
-            return (
-                <div>
-                    <h1>Puudub teabevajadus</h1>
-                    
-                </div>
-                
-            )
-        }
+       
 
   }
 

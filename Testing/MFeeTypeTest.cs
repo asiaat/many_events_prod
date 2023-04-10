@@ -14,6 +14,7 @@ public class MFeeTypeTest : IDisposable
     {
         testCase = new MFeeType();
         testCase.SetName("sularaha");
+        testCase.SetRemarks("EUR");
 
     }
 
@@ -30,5 +31,12 @@ public class MFeeTypeTest : IDisposable
     {
         Assert.Equal("sularaha", testCase.Name);
     }
+
+    [Fact]
+    public void Test2()
+    {
+        Assert.Equal("EUR", testCase.Remarks);
+    }
+
 
 }
