@@ -43,6 +43,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     const [user, setUser] = useState();
     const [personId, setPersonId] = useState();
     const [person, setPerson] = useState([]);
+    const [company, setCompany] = useState([]);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -78,21 +79,20 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 
     };
 
+    
     const handleGuestUpdateDialog = async (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
+        const data = new FormData(event.currentTarget);       
 
-        var guestId = data.get('guestid')
-
-        var updatePerson = {
-            id: data.get('guestid'),
-            firstName: data.get('gfirstname'),
-            lastName: data.get('glastname'),
-            personalCode: data.get('gpersonalcode'),
+        var updateComp = {
+            id: parseInt(data.get('compid')),
+            jurName: data.get('compjurname'),
+            regCode: data.get('compregcode'),
+            guestsCount: parseInt(data.get('guestsCount')),
         }
-        setPerson(updatePerson);
+        setCompany(updateComp);
 
-        console.log(updatePerson);
+        console.log(updateComp);
        
         handleUpdateGuestOpen()
 
@@ -104,18 +104,18 @@ function Row(props: { row: ReturnType<typeof createData> }) {
         const data = new FormData(event.currentTarget);
 
 
-        var updatedPerson = {
-            id: parseInt(data.get('guestid')),
-            firstName: data.get('firstName'),
-            lastName: data.get('lastName'),
-            personalCodeAsString: data.get('personalCodeAsString'),
+        var updatedComp = {
+            id: company.id,
+            jurName: company.jurName,
+            regCode: company.regCode,
+            guestsCount: company.guestsCount,
         }
-        console.log(updatedPerson);
+        console.log(updatedComp);
 
 
         
         await axios.put("https://localhost:44450/api/mpersons/update",
-            updatedPerson)
+            updatedComp)
             .then((response) => {
                 console.log(response.data);
                 handleUpdateGuestClose()
@@ -142,21 +142,21 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                     </Typography>
                     <Box component="form" onSubmit={handleGuestSave} noValidate sx={{ mt: 1 }}>
 
-                        <input type="hidden" name="guestid" value={person.id} />
-                        <TextField id="firstName"
-                            name="firstName"
-                            label="eesnimi"
-                            defaultValue={person.firstName}
+                        <input type="hidden" name="guestid" value={company.id} />
+                        <TextField id="jurName"
+                            name="jurName"
+                            label="Juriidiline nimi"
+                            defaultValue={company.jurName}
                             variant="outlined" />
-                        <TextField id="lastName"
-                            name="lastName"
-                            label="perekonnanimi"
-                            defaultValue={person.lastName}
+                        <TextField id="regCode"
+                            name="regCode"
+                            label="Registrikood"
+                            defaultValue={company.regCode}
                             variant="outlined" />
-                        <TextField id="personalCodeAsString"
-                            name="personalCodeAsString"
-                            label="isikukood"
-                            defaultValue={person.personalCode}
+                        <TextField id="guestsCount"
+                            name="guestsCount"
+                            label="Külastajate arv"
+                            defaultValue={company.guestsCount}
                             variant="outlined" />
 
                         <Button
@@ -281,10 +281,10 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                 <TableCell align="right">{row.guestsCount}</TableCell>
                 <TableCell align="right" >
                     <Box component="form" onSubmit={handleGuestUpdateDialog}>
-                        <input type="hidden" name="guestid" value={row.id} />
-                        <input type="hidden" name="gfirstname" value={row.firstName} />
-                        <input type="hidden" name="glastname" value={row.lastName} />
-                        <input type="hidden" name="gpersonalcode" value={row.personalCodeAsString} />
+                        <input type="hidden" name="compid" value={row.id} />
+                        <input type="hidden" name="compjurname" value={row.jurName} />
+                        <input type="hidden" name="compregcode" value={row.regCode} />
+                        
                         <Button
                         
                             type="submit"

@@ -116,6 +116,51 @@ namespace ManyEvents.Controllers
 
         }
 
+        [HttpPut]
+        [Route("update")]
+        public MCompanyDto UpdateCompany(MCompanyDto company)
+        {
+            var foundCompany = _context.MCompany
+                .Where(p => p.Id == company.Id)
+                .FirstOrDefault();
+
+            if (foundCompany is null)
+            {
+                string msg = "Cant found the Company with id: " +
+                    company.Id.ToString();
+
+                Log.Error(msg);
+
+                throw new Exception(msg);
+            }
+
+            if (foundCompany.JurName is not null)
+            {
+                foundCompany.SetJurName(company.JurName);
+            }
+
+            if (foundCompany.RegCode is not null)
+            {
+                foundCompany.SetReqCode(company.RegCode);
+            }
+            if (foundCompany.GuestsCount.ToString() != null)
+            {
+                foundCompany.SetGuestsCount(company.GuestsCount);
+            }
+
+            _context.SaveChanges();
+
+            return new MCompanyDto
+            {
+
+                Id = foundCompany.Id,
+                JurName = foundCompany.JurName,
+                RegCode = foundCompany.RegCode,
+                GuestsCount = foundCompany.GuestsCount
+
+            };
+        }
+
         // POST: MCompany/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
