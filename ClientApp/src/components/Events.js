@@ -21,6 +21,11 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+
 
 
 
@@ -53,11 +58,17 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     const [persons, setPersons] = useState([]);
     const [companies, setCompanies] = useState([]);
 
+    const [value, setValue] = React.useState(0); // for tabs
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const handleGuestOpen = () => setOpenGuest(true);
     const handleGuestClose = () => setOpenGuest(false);
 
+
+    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+        setValue(newValue);
+    };
 
     const handleGuestSubmit = async (event) => {
         event.preventDefault();
@@ -94,6 +105,8 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 
     };
 
+    
+
     const retrievePersons = async () => {
         await axios.get("https://localhost:44450/api/mpersons/persons")
             .then((response) => {
@@ -127,45 +140,67 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                 aria-labelledby="modal-guest-title"
                 aria-describedby="modal-guest-description"
             >
+                
+
                 <Box sx={style}>
-                    <Typography id="modal-guest-title" variant="h6" component="h2">
-                        Uus Külastaja
+
+                    
+                        <TabContext value={value}>
+                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                                <TabList onChange={handleTabChange} aria-label="lab API tabs example">
+                                    <Tab label="EraIsik" value="1" />
+                                    <Tab label="Ettevõte" value="2" />
+
+                                </TabList>
+                            </Box>
+                        <TabPanel value="1">Eraisik
+
+                         <Typography id="modal-guest-title" variant="h6" component="h2">
+                                Uus Külastaja
                     </Typography>
-                    <Typography id="modal-guest-description" sx={{ mt: 2 }}>
+                            <Typography id="modal-guest-description" sx={{ mt: 2 }}>
 
-                    </Typography>
-                    <Box sx={{ minWidth: 120 }}>
-                        <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">Isik</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={age}
-                                label="Isik"
-                                onChange={handleChange}
-                            >
- 
-                                {persons.map((person) => (
-                                    <MenuItem value={person.id}>                                    
-                                        {person.firstName}  {person.lastName}  {person.personalCodeAsString}    
-                                    </MenuItem>
-                                ))}
+                            </Typography>
+                            <Box sx={{ minWidth: 120 }}>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">Isik</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={age}
+                                        label="Isik"
+                                        onChange={handleChange}
+                                    >
 
-                            </Select>
-                        </FormControl>
-                    </Box>
+                                        {persons.map((person) => (
+                                            <MenuItem value={person.id}>
+                                                {person.firstName}  {person.lastName}  {person.personalCodeAsString}
+                                            </MenuItem>
+                                        ))}
 
-                    <Box component="form" onSubmit={handleGuestSubmit} noValidate sx={{ mt: 1 }}>
-                      
+                                    </Select>
+                                </FormControl>
+                            </Box>
 
-                        <Button
+                            <Box component="form" onSubmit={handleGuestSubmit} noValidate sx={{ mt: 1 }}>
 
-                            type="submit"
-                            variant="contained"
-                            sx={{ mt: 6, mb: 7 }}
 
-                        >Salvesta</Button>
-                    </Box>
+                                <Button
+
+                                    type="submit"
+                                    variant="contained"
+                                    sx={{ mt: 6, mb: 7 }}
+
+                                >Salvesta</Button>
+                            </Box>
+
+                        </TabPanel>
+                            <TabPanel value="2">Item Two</TabPanel>
+
+                        </TabContext>
+
+
+                   
                 </Box>
             </Modal>
         );
