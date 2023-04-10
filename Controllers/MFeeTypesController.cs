@@ -23,34 +23,31 @@ namespace ManyEvents.Controllers
             _context = context;
         }
 
+
         [HttpGet]
         [Route("feetypes")]
-        public IEnumerable<MFeeTypeDto> GetMEvents()
+        public async Task<IActionResult> GetFeeTypes()
         {
-            //Log.Information("MFeeTypesController::GetMEvents");
-
-
-            var list = _context.MFeeType
+            var list =  await _context.MFeeType
                 .Select(f => new MFeeTypeDto
                 {
                     Id = f.Id,
                     Name = f.Name,
                     Remarks = f.Remarks
 
-                }).ToList();
+                }).ToListAsync();
 
-            return list;
+            return Ok(list);
         }
 
-        // POST: MFeeTypes/Create
         [HttpPost]
         [Route("new")]
-        public MFeeTypeDto CreateNewFeeType(MFeeType ftype)
+        public async Task<MFeeTypeDto> CreateNewFeeType(MFeeType ftype)
         {
-            var newFeeType = _context.MFeeType
+            var newFeeType =  _context.MFeeType
                 .Add(ftype);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             Log.Information("MFeeTypesController::CreateNewFeeType "+
                 ftype.Name + " , "+ ftype.Remarks);
@@ -66,7 +63,9 @@ namespace ManyEvents.Controllers
       
         [HttpPut]
         [Route("update")]
-        public MFeeTypeDto UpdateFeeType(MFeeType ftype)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<MFeeTypeDto> UpdateFeeType(MFeeType ftype)
         {
             var foundFeeType = _context.MFeeType
                 .Where(f => f.Id == ftype.Id)
@@ -79,7 +78,8 @@ namespace ManyEvents.Controllers
 
                 Log.Error(msg);
 
-                throw new Exception(msg);
+                //throw new HttpProtocolException(StatusCodes.Status404NotFound,"Object not found",null);
+                //return StatusCode(400, "FeeType Not found");
             }
 
             if(ftype.Name is not null)
@@ -92,7 +92,7 @@ namespace ManyEvents.Controllers
                 foundFeeType.SetRemarks(ftype.Remarks);
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return new MFeeTypeDto
             {
@@ -103,34 +103,10 @@ namespace ManyEvents.Controllers
         }
 
 
-        // GET: MFeeTypes
-        public async Task<IActionResult> Index()
-        {
-              return _context.MFeeType != null ? 
-                          View(await _context.MFeeType.ToListAsync()) :
-                          Problem("Entity set 'DBContext.MFeeType'  is null.");
-        }
-
-        // GET: MFeeTypes/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.MFeeType == null)
-            {
-                return NotFound();
-            }
-
-            var mFeeType = await _context.MFeeType
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (mFeeType == null)
-            {
-                return NotFound();
-            }
-
-            return View(mFeeType);
-        }
-
         
         [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("delete/{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -158,9 +134,5 @@ namespace ManyEvents.Controllers
             
         }
 
-        private bool MFeeTypeExists(int id)
-        {
-          return (_context.MFeeType?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
     }
 }
