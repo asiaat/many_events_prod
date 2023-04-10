@@ -464,7 +464,7 @@ export default function Persons() {
 
     return (
         <div>
-            <h1>Osavõtjad</h1>
+            
             {renderReturn()}
             {renderModal()}
 

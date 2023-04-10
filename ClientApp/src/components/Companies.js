@@ -477,7 +477,7 @@ export default function Companies() {
 
     return (
         <div>
-            <h1>Osavõtjad Firmad</h1>
+           
             {renderReturn()}
             {renderModal()}
 

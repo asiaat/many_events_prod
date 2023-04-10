@@ -64,11 +64,9 @@ export default function Header() {
                         <a href="/events">Üritused</a>
                     </li>
                     <li>
-                        <a href="/guests">Osavõtjad</a>
+                        <a href="/visitors">Külastajad</a>
                     </li>
-                    <li>
-                        <a href="/companies">Firmad</a>
-                    </li>
+                    
                     
                     <li>
                         <a href="/feetypes">Maksevõimalused</a>
