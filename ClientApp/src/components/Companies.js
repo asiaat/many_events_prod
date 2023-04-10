@@ -58,7 +58,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     const handleGuestSubmit = async (event) => {
         event.preventDefault();
  
-        await axios.delete("https://localhost:44450/api/mpersons/delete/" + personId)
+        await axios.delete("https://localhost:44450/api/mcompanies/delete/" + personId)
             .then((response) => {
                 console.log(response.data);
                 handleDelGuestClose()
