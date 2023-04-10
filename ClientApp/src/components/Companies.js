@@ -88,7 +88,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
             id: parseInt(data.get('compid')),
             jurName: data.get('compjurname'),
             regCode: data.get('compregcode'),
-            guestsCount: parseInt(data.get('guestsCount')),
+            guestsCount: parseInt(data.get('compguestscount')),
         }
         setCompany(updateComp);
 
@@ -105,22 +105,19 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 
 
         var updatedComp = {
-            id: company.id,
-            jurName: company.jurName,
-            regCode: company.regCode,
-            guestsCount: company.guestsCount,
+            Id: parseInt(data.get('guestid')),
+            JurName: data.get('jurName'),
+            RegCode: data.get('regCode'),
+            GuestsCount: parseInt(data.get('guestsCount')),
         }
-        console.log(updatedComp);
-
-
-        
-        await axios.put("https://localhost:44450/api/mpersons/update",
+        console.log("handleGuestSave: " + JSON.stringify(updatedComp));
+     
+        await axios.put("https://localhost:44450/api/mcompanies/update",
             updatedComp)
             .then((response) => {
                 console.log(response.data);
                 handleUpdateGuestClose()
-            })
-        
+            })       
 
     };
 
@@ -135,7 +132,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
             >
                 <Box sx={style}>
                     <Typography id="modal-update-title" variant="h6" component="h2">
-                       Isiku andmete muutmine
+                       Firma andmete muutmine
                     </Typography>
                     <Typography id="modal-update-description" sx={{ mt: 2 }}>
 
@@ -284,6 +281,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                         <input type="hidden" name="compid" value={row.id} />
                         <input type="hidden" name="compjurname" value={row.jurName} />
                         <input type="hidden" name="compregcode" value={row.regCode} />
+                        <input type="hidden" name="compguestscount" value={row.guestsCount} />
                         
                         <Button
                         
