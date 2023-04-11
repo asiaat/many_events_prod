@@ -3,12 +3,12 @@
 Eeltingimused
  ---------------------------
  
- 1. Visual Studio 2022
- 2. git
+ - Visual Studio 2022
+ - git
  
  1. Kood
  
- Kood tuleb lahtipakkida või allalaadida repositooriumist endale soovitud folderisse.
+ Kood tuleb lahtipakkida või kloonida repositooriumist endale soovitud folderisse.
  Seejärel minna sinna folderisse ning avada VS 2022 fail ManyEvents.sln
  
  2. Andmebaasi initisaliseerimine
