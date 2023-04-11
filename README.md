@@ -34,7 +34,7 @@ Olla/minna projekti kataloogi , sealt käivitada käsk:
 
 Käivitamiseks valida start nupp.
 
-Selle käigus toimub buildimine ja ka andmebaasi VAAB3 migratsioon
+Selle käigus toimub buildimine ja ka andmebaasi  migratsioon
 
 
 6. Testimine
