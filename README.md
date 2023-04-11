@@ -1,4 +1,4 @@
-# külaliste registreerimissüsteem
+# Külaliste Registreerimissüsteem
 
 Eeltingimused
  ---------------------------
@@ -23,7 +23,8 @@ Olla/minna projekti kataloogi , sealt käivitada käsk:
    
 3. Andmebaasi vaikeväärtustega täitmiseks käivitada  
 	
-	 dotnet run /seed 
+		 dotnet run /seed 
+	 
    
 4. Logid
 
@@ -40,12 +41,12 @@ Selle käigus toimub buildimine ja ka andmebaasi VAAB3 migratsioon
 
 Testskriptide jooksutamiseks käivitada projekti kataloogis käsk
 
-  dotnet test
-  
- Starting test execution, please wait...
-A total of 1 test files matched the specified pattern.
+	  dotnet test
 
-Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 1 ms - Testing.dll (net7.0)
+	 Starting test execution, please wait...
+	A total of 1 test files matched the specified pattern.
+
+	Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 1 ms - Testing.dll (net7.0)
 
 
  
