@@ -29,6 +29,12 @@
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.4.0" />
     <PackageReference Include="Serilog.Enrichers.RequestUserId" Version="1.0.0" />
     <PackageReference Include="MediatR" Version="12.0.1" />
+    <PackageReference Include="xunit" Version="2.4.2" />
+    <PackageReference Include="FakeItEasy" Version="7.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +48,16 @@
     <None Remove="API\Dto\" />
     <None Remove="ClientApp\src\components\Header\" />
     <None Remove="ClientApp\src\components\Login\" />
+    <None Remove="Tests\.gitignore" />
+    <None Remove="Tests\Tests\obj\project.nuget.cache" />
+    <None Remove="Tests\Tests\obj\Tests.csproj.nuget.g.targets" />
+    <None Remove="Tests\Tests\obj\Tests.csproj.nuget.g.props" />
+    <None Remove="Tests\Tests\obj\Debug\net7.0\Tests.assets.cache" />
+    <None Remove="Tests\Tests\obj\Debug\net7.0\Tests.GeneratedMSBuildEditorConfig.editorconfig" />
+    <None Remove="Tests\Tests\obj\Debug\net7.0\Tests.csproj.AssemblyReference.cache" />
+    <None Remove="Tests\Tests\obj\Debug\net7.0\Tests.AssemblyInfoInputs.cache" />
+    <Content Remove="Tests\Tests\obj\Tests.csproj.nuget.dgspec.json" />
+    <Content Remove="Tests\Tests\obj\project.assets.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +67,12 @@
     <Folder Include="API\Dto\" />
     <Folder Include="ClientApp\src\components\Header\" />
     <Folder Include="ClientApp\src\components\Login\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Tests\Tests\Usings.cs" />
+    <Compile Remove="Tests\Tests\obj\Debug\net7.0\.NETCoreApp,Version=v7.0.AssemblyAttributes.cs" />
+    <Compile Remove="Tests\Tests\obj\Debug\net7.0\Tests.GlobalUsings.g.cs" />
+    <Compile Remove="Tests\Tests\obj\Debug\net7.0\Tests.AssemblyInfo.cs" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

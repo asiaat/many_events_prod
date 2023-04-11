@@ -44,10 +44,9 @@ if (args.Contains("/seed"))
 
         var seeder = new Seeder(context);
         seeder.SeedFeeTypes();
-        seeder.SeedPersons();
+        //seeder.SeedPersons();
 
-        //seeder.SeedEvents();
-        // Call other seed methods here
+        
     }
 }
 
